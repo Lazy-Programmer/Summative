@@ -1,4 +1,4 @@
-class Weapon extends NonLiving {
+abstract class Weapon extends NonLiving {
   int inaccuracy;
   int firerate;
   int damage;
@@ -11,8 +11,8 @@ class Weapon extends NonLiving {
   int cooldown;// used to time the firerate
   int reload;//used to time the reload
 
-  Weapon(PVector tposition, PVector tsize, PVector tvelocity, int tspeed, float torientation, /* GIF STUFF*/ int tinaccuracy, int tfirerate,int tdamage,int trange) {
-    super(tposition, tsize, tvelocity, tspeed, torientation/*GIF STUFF*/);
+  Weapon(PVector tposition, PVector tsize, PVector tvelocity, float torientation, /* GIF STUFF*/ int tinaccuracy, int tfirerate,int tdamage,int trange) {
+    super(tposition, tsize, tvelocity, torientation/*GIF STUFF*/);
     inaccuracy = tinaccuracy;
     firerate = tfirerate;
     damage = tdamage;
@@ -24,24 +24,24 @@ class Weapon extends NonLiving {
       target = mapCoordinatesToCircle(position, 300, target);// map the target to a circle to keep the accuracy constant rather than dependant on distance to target
       PVector deviation;
       if (inaccuracy != 0) {
-        deviation = new PVector(round(random(-inaccuracy, inaccuracy)));
+        deviation = new PVector(round(random(-inaccuracy, inaccuracy)), round(random(-inaccuracy, inaccuracy)));
       } else {//artifact from c++ conversion, not needed
         deviation = new PVector(0, 0);
       }
       PVector bulletVelocity;
-      bulletVelocity = new PVector(cos(atan2( target.y + deviation.y - origin.y, target.x + deviation.x - origin.x)), sin(atan2( target.y + deviation.y - origin.y, target.x + deviation.x - origin.x)));
-      //bullet append
-      delay = firerate;
+      bulletVelocity = new PVector(cos(atan2( target.y + deviation.y - position.y, target.x + deviation.x - position.x)), sin(atan2( target.y + deviation.y - position.y, target.x + deviation.x - position.x)));
+      bullets.add(new Bullet(position, new PVector(1,1), bulletVelocity, orientation, damage, team, range));
+      cooldown = firerate;
     }
     if(clipSize == 0){//reload the gun if it is empty
       reload = reloadTime;
     }
     if (cooldown > 0) {// wait between shots
-      cooldown -= /*time since last call*/;
+      cooldown -= timer.timeSinceLastCall;
     }
 
     if (reload > 0) {// reload the gun
-      reload -= /*time since last call*/;
+      reload -= timer.timeSinceLastCall;
     }
   }
 }
