@@ -14,15 +14,6 @@ abstract class Entity {
     health = thealth;
   }
 
-  /* boolean collide(ArrayList<Entity> entities, PVector intendedMove) {// handles collisions
-   for (int i = 0; i < entities.size(); i++) {
-   if(entities.get()){
-   return true;
-   }
-   }
-   return false;
-   }*/
-
   void display() {//default display method, should only be called when a child does not have its own yet or it encounters an error
     rect(position.x, position.y, size.x, size.y);
   }
@@ -38,7 +29,7 @@ abstract class Entity {
   }
 
   void move() {//moves the entity based on its directional velocity and time since last call
-    position.x += velocity.x/* * time since last call*/;
-    position.y += velocity.y/* * time since last call*/;
+    position.x += velocity.x * timer.timeSinceLastCall;
+    position.y += velocity.y * timer.timeSinceLastCall;
   }
 }
