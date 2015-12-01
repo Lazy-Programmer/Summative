@@ -5,8 +5,8 @@ class Player extends Living {//player class, can be used for 1 player or have mu
   boolean isMovingUp = false;
   boolean isMovingDown = false;
 
-  Player(PVector tposition, PVector tsize, PVector tvelocity, int tspeed, float torientation, /* GIF STUFF*/ int thealth, int tteam ) {
-    super(tposition, tsize, tvelocity, tspeed, torientation, thealth, tteam);
+  Player(PVector tposition, PVector tsize, PVector tvelocity, int tspeed, float torientation, /* GIF STUFF*/ int thealth, int tteam, int tammo ) {
+    super(tposition, tsize, tvelocity, tspeed, torientation, thealth, tteam, tammo);
   }
 
   void display() {//called to display the player along with its orientation
