@@ -18,7 +18,7 @@ abstract class Entity {
     rect(position.x, position.y, size.x, size.y);
   }
 
-  PVector collideEntity(ArrayList<Entity> entities) {//default collision code, does no predictive analysis, returns the direction the entity should move to be push out of the other entity
+  PVector collideEntity(ArrayList<? extends Entity> entities) {//default collision code, does no predictive analysis, returns the direction the entity should move to be push out of the other entity
     for ( int i = 0; i < entities.size(); i ++) {
       if (position.x + size.x/2 >= entities.get(i).position.x - entities.get(i).size.x && position.x - size.x/2 <= entities.get(i).position.x + entities.get(i).size.x/2 && position.y + size.y/2 >= entities.get(i).position.y - entities.get(i).size.y/2 && position.y - size.y/2 <= entities.get(i).position.y + entities.get(i).size.y/2) {
         float angle = atan2(  entities.get(i).position.y - position.y, entities.get(i).position.x - position.x )  * 180 / PI;
