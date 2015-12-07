@@ -15,7 +15,7 @@ abstract class Entity {
   }
 
   void display() {//default display method, should only be called when a child does not have its own yet or it encounters an error
-    rect(position.x, position.y, size.x, size.y);
+    rect(position.x - view.position.x, position.y - view.position.y, size.x, size.y);
   }
 
   PVector collideEntity(ArrayList<? extends Entity> entities) {//default collision code, does no predictive analysis, returns the direction the entity should move to be push out of the other entity
