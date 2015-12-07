@@ -6,9 +6,11 @@ ArrayList<Wall> walls = new ArrayList<Wall>();
 
 void setup() {
   size(640, 480);
+  rectMode(CENTER);
   myPlayer = new Player(new PVector(width/2, height/2), new PVector(32, 32), new PVector(0, 0), 0.35, 0, 100, 0, 45 );
   timer = new Timer();
   walls.add(new Wall(new PVector(50,50) , new PVector(50,50) ,5));
+  noStroke();
 }
 
 void draw() {
