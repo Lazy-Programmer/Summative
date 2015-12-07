@@ -62,4 +62,39 @@ class Player extends Living {//player class, can be used for 1 player or have mu
       velocity.y = 0;
     }
   }
+
+  int collisionSide(ArrayList<? extends Entity> entities, int entityID) {
+    if (position.x + size.x/2 <= entities.get(entityID).position.x - entities.get(entityID).size.x/2 && position.x + size.x/2 + velocity.x*timer.timeSinceLastCall >= entities.get(entityID).position.x - entities.get(entityID).size.x/2) {
+      return 4; //1: Up, 2: Right, 3: Down, 4: Left
+    } else if (position.x - size.x/2 >= entities.get(entityID).position.x + entities.get(entityID).size.x/2 && position.x - size.x/2 + velocity.x*timer.timeSinceLastCall <= entities.get(entityID).position.x + entities.get(entityID).size.x/2) {
+      return 2;
+    } else if (position.y + size.y/2 <= entities.get(entityID).position.y - entities.get(entityID).size.y/2 && position.y + size.y/2 + velocity.y*timer.timeSinceLastCall >= entities.get(entityID).position.y - entities.get(entityID).size.y/2) {
+      return 1;
+    } else if (position.y - size.y/2 >= entities.get(entityID).position.y + entities.get(entityID).size.y/2 && position.y - size.y/2 + velocity.y*timer.timeSinceLastCall <= entities.get(entityID).position.y + entities.get(entityID).size.y/2) {
+      return 3;
+    }
+    return 0;
+  }
+
+  void moveAdvanced(ArrayList<? extends Entity> entities) {
+    int doesCollide = collisionAdvanced(entities);
+    int sideCollided = 0;
+    if (doesCollide ==  -1) {
+      position.x += velocity.x * timer.timeSinceLastCall;
+      position.y += velocity.y * timer.timeSinceLastCall;
+    } else {
+      sideCollided = collisionSide(entities, doesCollide);
+    }
+    if (doesCollide != -1) {
+      if (sideCollided == 1){// && isMovingUp) {
+        position.y = entities.get(doesCollide).position.y - entities.get(doesCollide).size.y/2 - size.y/2 - 1;
+      } else if (sideCollided == 2){// && isMovingRight) {
+        position.x = entities.get(doesCollide).position.x + entities.get(doesCollide).size.x/2 + size.x/2 + 1;
+      } else if (sideCollided == 3){// && isMovingDown) {
+        position.y = entities.get(doesCollide).position.y + entities.get(doesCollide).size.y/2 + size.y/2 + 1;
+      } else if (sideCollided == 4){// && isMovingLeft) {
+        position.x = entities.get(doesCollide).position.x - entities.get(doesCollide).size.x/2 - size.x/2 - 1;
+      }
+    }
+  }
 }
