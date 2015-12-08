@@ -10,7 +10,7 @@ class Player extends Living {//player class, can be used for 1 player or have mu
   }
 
   void display() {//called to display the player along with its orientation
-    rect(position.x, position.y, size.x, size.y);
+    rect(position.x - view.position.x, position.y - view.position.y, size.x, size.y);
   }
 
   void calculateVelocity() {// used to determine what direction the player is going in
