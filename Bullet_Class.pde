@@ -2,10 +2,13 @@ class Bullet extends NonLiving {
   int damage;
   int team;
   int range;
+  PVector origin = new PVector(0,0);
 
   Bullet(PVector tposition, PVector tsize, PVector tvelocity, float torientation, /* GIF STUFF*/ int tdamage, int tteam, int trange) {
     super(tposition, tsize, tvelocity, torientation/*GIF STUFF*/);
     damage = tdamage;
+    origin.x = tposition.x;
+    origin.y = tposition.y;
     team = tteam;
     range = trange;
   }
@@ -18,6 +21,15 @@ class Bullet extends NonLiving {
         }
         return true;
       }
+    }
+    return false;
+  }
+
+  boolean moveBullet() {//moves the entity based on its directional velocity and time since last call
+    position.x += velocity.x * timer.timeSinceLastCall;
+    position.y += velocity.y * timer.timeSinceLastCall;
+    if (dist(origin.x, origin.y, position.x, position.y) > range) {
+      return true;
     }
     return false;
   }
