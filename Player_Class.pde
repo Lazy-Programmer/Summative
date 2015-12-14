@@ -1,16 +1,24 @@
-class Player extends Living {//player class, can be used for 1 player or have multiple of them for multiple players
-  /*weapon*/
+class Player extends Living {//player class, can be used for 1 player or have multiple of them for multiple player
   boolean isMovingLeft = false;
   boolean isMovingRight = false;
   boolean isMovingUp = false;
   boolean isMovingDown = false;
+  boolean isShooting = false;
+  int equipedWeapon = 1;
+  int weapon1 = -1;
+  int weapon2 = -1;
 
-  Player(PVector tposition, PVector tsize, PVector tvelocity, float tspeed, float torientation, /* GIF STUFF*/ int thealth, int tteam, int tammo ) {
+  Player(PVector tposition, PVector tsize, PVector tvelocity, float tspeed, float torientation, /* GIF STUFF*/ int thealth, int tteam, int tammo) {
     super(tposition, tsize, tvelocity, tspeed, torientation, thealth, tteam, tammo);
   }
 
-  void display() {//called to display the player along with its orientation
-    rect(position.x - view.position.x, position.y - view.position.y, size.x, size.y);
+  void display() {
+    orientation = atan2( position.y-view.convertCoords(mouseX,mouseY).y, position.x-view.convertCoords(mouseX,mouseY).x )*180/PI + 180;
+    translate(position.x,position.y);
+    rotate(radians(orientation));
+    rect(0,0, size.x, size.y);
+    rotate(-radians(orientation));
+    translate(-position.x,-position.y);
   }
 
   void calculateVelocity() {// used to determine what direction the player is going in
@@ -86,15 +94,39 @@ class Player extends Living {//player class, can be used for 1 player or have mu
       sideCollided = collisionSide(entities, doesCollide);
     }
     if (doesCollide != -1) {
-      if (sideCollided == 1){// && isMovingUp) {
+      if (sideCollided == 1) {
         position.y = entities.get(doesCollide).position.y - entities.get(doesCollide).size.y/2 - size.y/2 - 1;
-      } else if (sideCollided == 2){// && isMovingRight) {
+        position.x += velocity.x * timer.timeSinceLastCall;
+        isMovingUp = false;
+        velocity.y = 0;
+      } else if (sideCollided == 2) {
         position.x = entities.get(doesCollide).position.x + entities.get(doesCollide).size.x/2 + size.x/2 + 1;
-      } else if (sideCollided == 3){// && isMovingDown) {
+        position.y += velocity.y * timer.timeSinceLastCall;
+        isMovingRight = false;
+        velocity.x = 0;
+      } else if (sideCollided == 3) {
         position.y = entities.get(doesCollide).position.y + entities.get(doesCollide).size.y/2 + size.y/2 + 1;
-      } else if (sideCollided == 4){// && isMovingLeft) {
+        position.x += velocity.x * timer.timeSinceLastCall;
+        isMovingDown = false;
+        velocity.y = 0;
+      } else if (sideCollided == 4) {
         position.x = entities.get(doesCollide).position.x - entities.get(doesCollide).size.x/2 - size.x/2 - 1;
+        position.y += velocity.y * timer.timeSinceLastCall;
+        isMovingLeft = false;
+        velocity.x = 0;
       }
+    }
+  }
+
+  void shoot() {
+    if( (weapon1 == -1 && equipedWeapon == 1) || equipedWeapon == 0){
+      PVector firingPos;
+   //   if(orientation < 180){
+   //     firingPos = new PVector(position.x + cos(180 - orientation)*size.x/2, position.y + sin(orientation)*size.y/2);
+ //     }else{
+        firingPos = new PVector(position.x + cos(orientation), position.y + sin(orientation ));
+ //     }
+      fist.fire(firingPos, new PVector(mouseX, mouseY), 1);
     }
   }
 }
