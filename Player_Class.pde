@@ -5,7 +5,7 @@ class Player extends Living {//player class, can be used for 1 player or have mu
   boolean isMovingDown = false;
   boolean isShooting = false;
   int equipedWeapon = 1;
-  int weapon1 = -1;
+  int weapon1 = 1;
   int weapon2 = -1;
 
   Player(PVector tposition, PVector tsize, PVector tvelocity, float tspeed, float torientation, /* GIF STUFF*/ int thealth, int tteam, int tammo) {
@@ -13,12 +13,12 @@ class Player extends Living {//player class, can be used for 1 player or have mu
   }
 
   void display() {
-    orientation = atan2( position.y-view.convertCoords(mouseX,mouseY).y, position.x-view.convertCoords(mouseX,mouseY).x )*180/PI + 180;
-    translate(position.x,position.y);
+    orientation = atan2( position.y-view.convertCoords(mouseX, mouseY).y, position.x-view.convertCoords(mouseX, mouseY).x )*180/PI + 180;
+    translate(position.x, position.y);
     rotate(radians(orientation));
-    rect(0,0, size.x, size.y);
+    rect(0, 0, size.x, size.y);
     rotate(-radians(orientation));
-    translate(-position.x,-position.y);
+    translate(-position.x, -position.y);
   }
 
   void calculateVelocity() {// used to determine what direction the player is going in
@@ -119,14 +119,14 @@ class Player extends Living {//player class, can be used for 1 player or have mu
   }
 
   void shoot() {
-    if( (weapon1 == -1 && equipedWeapon == 1) || equipedWeapon == 0){
+    if ( (weapon1 == -1 && equipedWeapon == 1) || equipedWeapon == 0) {
       PVector firingPos;
-   //   if(orientation < 180){
-   //     firingPos = new PVector(position.x + cos(180 - orientation)*size.x/2, position.y + sin(orientation)*size.y/2);
- //     }else{
-        firingPos = new PVector(position.x + cos(orientation), position.y + sin(orientation ));
- //     }
+      firingPos = new PVector(position.x + cos(orientation), position.y + sin(orientation ));
       fist.fire(firingPos, new PVector(mouseX, mouseY), 1);
+    }else if((weapon1 == 1 && equipedWeapon == 1) || (weapon2 == 1 && equipedWeapon == 2) ){
+      PVector firingPos;
+      firingPos = new PVector(position.x + cos(orientation), position.y + sin(orientation ));
+      pistol.fire(firingPos, new PVector(mouseX, mouseY), 1);
     }
   }
 }
