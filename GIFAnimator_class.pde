@@ -63,6 +63,6 @@ class GIFAnimator{
     }*/
     
     //draw the image
-    image(slides.get(in[index]), position.x, position.y, size.x, size.y);
-  }
+   // image(slides.get(in[index]), position.x, position.y, size.x, size.y);
+  //}
 }
