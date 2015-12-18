@@ -6,7 +6,7 @@ class Player extends Living {//player class, can be used for 1 player or have mu
   boolean isShooting = false;
   int equipedWeapon = 1;
   int weapon1 = 1;
-  int weapon2 = -1;
+  int weapon2 = 2;
 
   Player(PVector tposition, PVector tsize, PVector tvelocity, float tspeed, float torientation, /* GIF STUFF*/ int thealth, int tteam, int tammo) {
     super(tposition, tsize, tvelocity, tspeed, torientation, thealth, tteam, tammo);
@@ -119,14 +119,14 @@ class Player extends Living {//player class, can be used for 1 player or have mu
   }
 
   void shoot() {
+    PVector firingPos;
+    firingPos = new PVector(position.x + cos(orientation), position.y + sin(orientation ));
     if ( (weapon1 == -1 && equipedWeapon == 1) || equipedWeapon == 0) {
-      PVector firingPos;
-      firingPos = new PVector(position.x + cos(orientation), position.y + sin(orientation ));
       fist.fire(firingPos, new PVector(mouseX, mouseY), 1);
-    }else if((weapon1 == 1 && equipedWeapon == 1) || (weapon2 == 1 && equipedWeapon == 2) ){
-      PVector firingPos;
-      firingPos = new PVector(position.x + cos(orientation), position.y + sin(orientation ));
+    } else if ((weapon1 == 1 && equipedWeapon == 1) || (weapon2 == 1 && equipedWeapon == 2) ) {
       pistol.fire(firingPos, new PVector(mouseX, mouseY), 1);
+    } else if ( (weapon1 == 2 && equipedWeapon == 1) || (weapon2 == 2 && equipedWeapon == 2) ) {
+      shotgun.fire(firingPos, new PVector(mouseX, mouseY), 1);
     }
   }
 }
