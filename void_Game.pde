@@ -23,6 +23,7 @@ void Game() {
   }
   fist.delay();
   pistol.delay();
+  shotgun.delay();
   timer.call();
   popMatrix();
 }
