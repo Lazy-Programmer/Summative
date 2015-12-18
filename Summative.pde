@@ -3,6 +3,7 @@ ArrayList<Bullet> bullets = new ArrayList<Bullet>();
 Player myPlayer;
 Fist fist;
 Pistol pistol;
+Shotgun shotgun;
 int gameState = 1;
 ArrayList<Wall> walls = new ArrayList<Wall>();
 View view;
@@ -13,6 +14,7 @@ void setup() {
   myPlayer = new Player(new PVector(width/2, height/2), new PVector(32, 32), new PVector(0, 0), 0.35, 0, 100, 0, 45);
   fist = new Fist();
   pistol = new Pistol();
+    shotgun = new Shotgun();
   timer = new Timer();
   walls.add(new Wall(new PVector(50, 50), new PVector(50, 50), 0));
   noStroke();
