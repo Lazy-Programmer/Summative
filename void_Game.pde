@@ -26,3 +26,4 @@ void Game() {
   shotgun.delay();
   timer.call();
   popMatrix();
+}
