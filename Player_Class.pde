@@ -85,36 +85,12 @@ class Player extends Living {//player class, can be used for 1 player or have mu
   }
 
   void moveAdvanced(ArrayList<? extends Entity> entities) {
+    position.x += velocity.x * timer.timeSinceLastCall;
+    position.y += velocity.y * timer.timeSinceLastCall;
     int doesCollide = collisionAdvanced(entities);
-    int sideCollided = 0;
-    if (doesCollide ==  -1) {
-      position.x += velocity.x * timer.timeSinceLastCall;
-      position.y += velocity.y * timer.timeSinceLastCall;
-    } else {
-      sideCollided = collisionSide(entities, doesCollide);
-    }
-    if (doesCollide != -1) {
-      if (sideCollided == 1) {
-        position.y = entities.get(doesCollide).position.y - entities.get(doesCollide).size.y/2 - size.y/2 - 1;
-        position.x += velocity.x * timer.timeSinceLastCall;
-        isMovingUp = false;
-        velocity.y = 0;
-      } else if (sideCollided == 2) {
-        position.x = entities.get(doesCollide).position.x + entities.get(doesCollide).size.x/2 + size.x/2 + 1;
-        position.y += velocity.y * timer.timeSinceLastCall;
-        isMovingRight = false;
-        velocity.x = 0;
-      } else if (sideCollided == 3) {
-        position.y = entities.get(doesCollide).position.y + entities.get(doesCollide).size.y/2 + size.y/2 + 1;
-        position.x += velocity.x * timer.timeSinceLastCall;
-        isMovingDown = false;
-        velocity.y = 0;
-      } else if (sideCollided == 4) {
-        position.x = entities.get(doesCollide).position.x - entities.get(doesCollide).size.x/2 - size.x/2 - 1;
-        position.y += velocity.y * timer.timeSinceLastCall;
-        isMovingLeft = false;
-        velocity.x = 0;
-      }
+    if (!(doesCollide ==  -1)) {//if it is not colliding with anything, move.
+      position.x -= velocity.x * timer.timeSinceLastCall;
+      position.y -= velocity.y * timer.timeSinceLastCall;
     }
   }
 
