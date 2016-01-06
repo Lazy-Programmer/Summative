@@ -22,6 +22,9 @@ class Grid{//The class for the grid will also be placed here
   }
   
   void display(){
+    //first of and most importantly
+    stroke(1); //so we can see the grid;
+    
     //offsets
     if(XOffset > 0){
       XOffset = 0;
@@ -63,7 +66,24 @@ class Grid{//The class for the grid will also be placed here
     for(int i = 0; i < tileLocations.size(); i++){
       PImage tempIMG = loadImage(tileLocations.get(i).filename);
       if(((tileLocations.get(i).location.x - x)*mapZoom + XOffset)+ x + tileLocations.get(i).size > 0 && ((tileLocations.get(i).location.x - x)*mapZoom + XOffset)+ x + tileLocations.get(i).size < width && ((tileLocations.get(i).location.y - y)*mapZoom + YOffset) + y + tileLocations.get(i).size > 0 && ((tileLocations.get(i).location.y - y)*mapZoom + YOffset) + y + tileLocations.get(i).size < height){
-        image(tempIMG,((tileLocations.get(i).location.x - x)*mapZoom + XOffset)+ x, ((tileLocations.get(i).location.y - y)*mapZoom + YOffset) + y, tileLocations.get(i).size *mapZoom, tileLocations.get(i).size *mapZoom);
+        pushMatrix();
+        translate(((tileLocations.get(i).location.x - x)*mapZoom + XOffset)+ x, ((tileLocations.get(i).location.y - y)*mapZoom + YOffset) + y);
+        rotate(radians(tileLocations.get(i).orientation));
+        float tempX = 0, tempY = 0;
+        if(tileLocations.get(i).orientation == 180){
+          tempX = -rows*mapZoom;
+          tempY = -cols*mapZoom;
+        }else if(tileLocations.get(i).orientation == 90){
+          tempX = 0;
+          tempY = -cols*mapZoom;
+        }else if(tileLocations.get(i).orientation == 270){
+          tempX = -rows*mapZoom;
+          tempY = 0;
+        }
+        translate(tempX, tempY);
+        image(tempIMG, 0, 0, rows*mapZoom, cols*mapZoom);
+        popMatrix();
+        //image(tempIMG,((tileLocations.get(i).location.x - x)*mapZoom + XOffset)+ x, ((tileLocations.get(i).location.y - y)*mapZoom + YOffset) + y, tileLocations.get(i).size *mapZoom, tileLocations.get(i).size *mapZoom);
       }
     }
     
@@ -73,7 +93,23 @@ class Grid{//The class for the grid will also be placed here
         fill(0, 255, 0);
         rectMode(CORNER);
         tint(255, 200);
-        image(prevIMG, x + (rows*mapZoom) * int((mouseX - x - XMove)/(rows*mapZoom)) + XMove, y + (cols*mapZoom) * int(((mouseY - y - YMove)/(cols*mapZoom))) + YMove, rows*mapZoom, cols*mapZoom);
+        pushMatrix();
+        translate((x + (rows*mapZoom) * int((mouseX - x - XMove)/(rows*mapZoom)) + XMove), (y + (cols*mapZoom) * int(((mouseY - y - YMove)/(cols*mapZoom))) + YMove));
+        rotate(radians(currOrientation));
+        float tempX = 0, tempY = 0;
+        if(currOrientation == 180){
+          tempX = -rows*mapZoom;
+          tempY = -cols*mapZoom;
+        }else if(currOrientation == 90){
+          tempX = 0;
+          tempY = -cols*mapZoom;
+        }else if(currOrientation == 270){
+          tempX = -rows*mapZoom;
+          tempY = 0;
+        }
+        translate(tempX, tempY);
+        image(prevIMG, 0, 0, rows*mapZoom, cols*mapZoom);
+        popMatrix();
         rectMode(CENTER);
       }
       
@@ -97,7 +133,7 @@ class Grid{//The class for the grid will also be placed here
           if(!isIn){
             noTint();
             tileLocations.add(new Tile(new PVector(((rows*mapZoom) * int((mouseX - x - XOffset)/(rows*mapZoom)))/mapZoom + x, 
-                                                   ((cols*mapZoom) * int((mouseY - y - YOffset)/(cols*mapZoom)))/mapZoom + y), tileLoadText.getText(), rows, typeList.currIndex));
+                                                   ((cols*mapZoom) * int((mouseY - y - YOffset)/(cols*mapZoom)))/mapZoom + y), tileLoadText.getText(), rows, typeList.currIndex, currOrientation));
           }
         }
       }
