@@ -1,4 +1,7 @@
 Grid tileMap;
+GIFBox gifBox;
+GIFAnimator gifPlayer;
+boolean deletingSlides = false;
 
 //preview
 PImage prevIMG;
@@ -7,6 +10,11 @@ PImage prevIMG;
 Button loadButton;
 Button editTab;
 Button loadTab;
+Button GIFTab;
+Button rotateButton;
+Button spriteSpeed;
+Button deleteSlide;
+Button output;
 
 //Controls
 ListBox sizeList;
@@ -22,3 +30,4 @@ boolean displaying = false;
 ArrayList <Tile> tileLocations = new ArrayList<Tile>(1);
 String state = "edit";
 float mapZoom = 1.0;
+float currOrientation;

@@ -22,19 +22,31 @@ void draw(){
   }else if(state == "load"){
     loadTab.backColour(24, 23, 100);
     loadTab.hovering = false;
+  }else if(state == "GIF"){
+    GIFTab.backColour(24, 23, 100);
+    GIFTab.hovering = false;
   }
   editTab.update();
   editTab.display();
   loadTab.update();
   loadTab.display();
+  GIFTab.update();
+  GIFTab.display();
   
   if(loadTab.clicked()){
     mousePressed = false;
     state = "load";
     editTab.backColour(23, 54, 175);
+    GIFTab.backColour(23, 54, 175);
   }else if(editTab.clicked()){
     mousePressed = false;
     state = "edit";
+    loadTab.backColour(23, 54, 175);
+    GIFTab.backColour(23, 54, 175);
+  }else if(GIFTab.clicked()){
+    mousePressed = false;
+    state = "GIF";
+    editTab.backColour(23, 54, 175);
     loadTab.backColour(23, 54, 175);
   }
   stroke(0);
@@ -46,11 +58,22 @@ void draw(){
     loadButton.buttonText = "Save Map";
     sizeList.display();
     typeList.display();
+    rotateButton.update();
+    rotateButton.display();
     
     //use the save button
     if(loadButton.clicked()){
       mousePressed = false;
       SaveMap();
+    }
+    
+    //use rotate button
+    if(rotateButton.clicked()){
+      mousePressed = false;
+      currOrientation += 90;
+      if(currOrientation >= 360){
+        currOrientation = 0;
+      }
     }
     
     //use lists
@@ -75,6 +98,73 @@ void draw(){
     if(loadButton.clicked()){
       mousePressed = false;
       LoadMap();
+    }
+  }else if(state == "GIF"){
+    trueTileLoadText.setVisible(false);
+    tileLoadText.setVisible(false);
+    savePath.setVisible(true);
+    loadButton.buttonText = "Load GIF";
+    
+    //display the gif stuff
+    gifBox.display();
+    gifPlayer.display();
+    stroke(0); 
+    spriteSpeed.update();
+    spriteSpeed.display();
+    deleteSlide.update();
+    deleteSlide.display();
+    output.update();
+    output.display();
+    
+    if(loadButton.clicked()){
+      mousePressed = false;
+      File file = new File(sketchPath(savePath.getText()));
+      if(file.exists() && savePath.getText().charAt(0) != '/' && savePath.getText().length() > 0){
+        gifBox.addSlide(savePath.getText());
+        gifPlayer.addSlide(savePath.getText());
+      }
+    }
+    
+    if(spriteSpeed.clicked()){
+     mousePressed = false;
+     gifPlayer.fps += 4;
+     if(gifPlayer.fps > 56){
+       gifPlayer.fps = 30;
+     }
+    }
+    
+    if(deleteSlide.clicked()){
+      mousePressed = false;
+      if(deletingSlides){
+        deletingSlides = false;
+      }else{
+        deletingSlides = true;
+      }
+    }
+    
+    if(output.clicked()){
+      mousePressed = false;
+      OutputGIF();
+    }
+  }
+  
+  //Things in common for all states
+  if(deletingSlides){
+    for(int i = 0; i < gifBox.slides.size(); i++){
+       gifBox.slides.get(i).backColour(28, 196, 26);
+       gifBox.slides.get(i).textColour(0, 0, 0);
+       
+       if(gifBox.slides.get(i).clicked()){
+         gifBox.slides.remove(i);
+         gifPlayer.index = 0;
+         gifPlayer.remove(i);
+         deletingSlides = false;
+       }
+    }
+  }else{
+    for(int j = 0; j < gifBox.slides.size(); j++){
+      gifBox.slides.get(j).backColour(0, 0, 0);
+      gifBox.slides.get(j).textColour(28, 196, 26);
     }
   }
   
@@ -103,13 +193,28 @@ void draw(){
 
 void mouseWheel(MouseEvent event) {
   float e = event.getCount();
-  if(e > 0){
-    mapZoom += 0.01;
-  }else if(e < 0){
-    mapZoom -= 0.01;
-    if(mapZoom <= 0.2){
-      mapZoom = 0.2;
+  
+  if(!(mouseX < tileMap.x || mouseX > tileMap.x + tileMap.w || mouseY < tileMap.y || mouseY > tileMap.y + tileMap.h)){
+    if(e > 0){
+      mapZoom += 0.01;
+    }else if(e < 0){
+      mapZoom -= 0.01;
+      if(mapZoom <= 0.2){
+        mapZoom = 0.2;
+      }
     }
+  }
+  
+  //GIFBox
+  if(!(mouseX < gifBox.x-gifBox.w/2 || mouseX > gifBox.x+gifBox.w/2 || mouseY < gifBox.y-gifBox.w/2 || mouseY > gifBox.y+gifBox.w/2) && state == "GIF"){
+    if(e > 0){
+      gifBox.yOffset += 2;
+    }else if(e < 0){
+      gifBox.yOffset -= 2;
+      if(gifBox.yOffset < 0){
+        gifBox.yOffset = 0;
+      }
+    } 
   }
 }
 
@@ -119,21 +224,51 @@ void init(){
   //tile map
  tileMap = new Grid(20, 80, height - 100, height - 100); 
  
+ //GIF Box
+ gifBox = new GIFBox(int(width*0.874), int(height*0.55), int(width*0.26), int(height*0.5));
+ gifPlayer = new GIFAnimator(width*0.874, height*0.12, height*0.1, height*0.1);
+ 
  //buttons
  loadButton = new Button(int(width*0.87), int(height*0.95), 140, 20);
  loadButton.buttonText = "Save Map";
  loadButton.backColour(23, 54, 175);
  loadButton.roundness = 0;
  
- editTab = new Button(int(width*0.81), int(height*0.04), int(width*0.13), int(height*0.08));
+ editTab = new Button(int(width*0.793), int(height*0.04), int(width*0.096), int(height*0.08));
  editTab.roundness = 0;
  editTab.buttonText = "Edit";
  editTab.backColour(23, 54, 175);
  
- loadTab = new Button(int(width*0.935), int(height*0.04), int(width*0.13), int(height*0.08));
+ loadTab = new Button(int(width - width*0.12), int(height*0.04), int(width*0.096), int(height*0.08));
  loadTab.roundness = 0;
  loadTab.buttonText = "Load";
  loadTab.backColour(23, 54, 175);
+ 
+ GIFTab = new Button(int(width*0.97), int(height*0.04), int(width*0.096), int(height*0.08));
+ GIFTab.roundness = 0;
+ GIFTab.buttonText = "GIF";
+ GIFTab.backColour(23, 54, 175);
+ 
+ rotateButton = new Button(int(width*0.935), int(height*0.8), int(width*0.05), int(height*0.05));
+ rotateButton.roundness = 0;
+ rotateButton.buttonText = "r°";
+ rotateButton.backColour(23, 54, 175);
+ 
+ spriteSpeed = new Button(int(width*0.805), int(height*0.825), 80, 20);
+ spriteSpeed.buttonText = "Speed";
+ spriteSpeed.backColour(23, 54, 175);
+ spriteSpeed.roundness = 0;
+ 
+ deleteSlide = new Button(int(width*0.935), int(height*0.825), 80, 20);
+ deleteSlide.buttonText = "Delete";
+ deleteSlide.backColour(23, 54, 175);
+ deleteSlide.roundness = 0;
+ 
+  output = new Button(int(width*0.87), int(height*0.25), 150, 20);
+  output.buttonText = "Output";
+  output.backColour(23, 54, 175);
+  output.roundness = 0;
+ 
  
  //text field(s)
  PFont font = createFont("arial",20);
@@ -154,7 +289,7 @@ void init(){
      .setColor(color(255,255,255))
      ;
      
-  savePath = mainControl.addTextfield("save path")
+  savePath = mainControl.addTextfield("file path")
      .setPosition(width*0.77,height*0.85)
      .setSize(140,30)
      .setFont(font)
