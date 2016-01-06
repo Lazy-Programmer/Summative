@@ -4,6 +4,7 @@ abstract class Entity {
   PVector size;
   PVector velocity;
   float orientation;
+  boolean tangible;
   //GIF STUFF
 
   Entity(PVector tposition, PVector tsize, PVector tvelocity, float torientation /* GIF STUFF*/, int thealth) {
@@ -12,6 +13,7 @@ abstract class Entity {
     velocity = tvelocity;
     orientation = torientation;
     health = thealth;
+    tangible = true; //the only real exceptions are floors
   }
 
   void display() {//default display method, should only be called when a child does not have its own yet or it encounters an error
@@ -34,7 +36,7 @@ abstract class Entity {
 
   int collisionAdvanced(ArrayList<? extends Entity> entities) {//advanced collision, only returns whether or not there is a collision
     for (int i = 0; i < entities.size(); i++) {
-     if(!(position.x + velocity.x + size.x/2 <= entities.get(i).position.x - entities.get(i).size.x/2 || position.x + velocity.x - size.x/2 >= entities.get(i).position.x + entities.get(i).size.x/2 || position.y + size.y/2 <= entities.get(i).position.y - entities.get(i).size.y/2 || position.y - size.y/2 >= entities.get(i).position.y + entities.get(i).size.y/2)){
+      if((!(position.x + velocity.x + size.x/2 <= entities.get(i).position.x - entities.get(i).size.x/2 || position.x + velocity.x - size.x/2 >= entities.get(i).position.x + entities.get(i).size.x/2 || position.y + size.y/2 <= entities.get(i).position.y - entities.get(i).size.y/2 || position.y - size.y/2 >= entities.get(i).position.y + entities.get(i).size.y/2)) && entities.get(i).tangible == true){
         return i;
       }
     }
