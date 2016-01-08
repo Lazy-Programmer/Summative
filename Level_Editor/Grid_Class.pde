@@ -67,9 +67,9 @@ class Grid{//The class for the grid will also be placed here
       PImage tempIMG = loadImage(tileLocations.get(i).filename);
       if(((tileLocations.get(i).location.x - x)*mapZoom + XOffset)+ x + tileLocations.get(i).size > 0 && ((tileLocations.get(i).location.x - x)*mapZoom + XOffset)+ x + tileLocations.get(i).size < width && ((tileLocations.get(i).location.y - y)*mapZoom + YOffset) + y + tileLocations.get(i).size > 0 && ((tileLocations.get(i).location.y - y)*mapZoom + YOffset) + y + tileLocations.get(i).size < height){
         pushMatrix();
-        translate(((tileLocations.get(i).location.x - x)*mapZoom + XOffset)+ x, ((tileLocations.get(i).location.y - y)*mapZoom + YOffset) + y);
+        translate(((tileLocations.get(i).location.x - x)*mapZoom + XOffset) + x, ((tileLocations.get(i).location.y - y)*mapZoom + YOffset) + y);
         rotate(radians(tileLocations.get(i).orientation));
-        float tempX = 0, tempY = 0;
+        /*float tempX = 0, tempY = 0;
         if(tileLocations.get(i).orientation == 180){
           tempX = -rows*mapZoom;
           tempY = -cols*mapZoom;
@@ -80,10 +80,9 @@ class Grid{//The class for the grid will also be placed here
           tempX = -rows*mapZoom;
           tempY = 0;
         }
-        translate(tempX, tempY);
-        image(tempIMG, 0, 0, rows*mapZoom, cols*mapZoom);
+        translate(tempX, tempY);*/
+        image(tempIMG, 0, 0, tileLocations.get(i).size *mapZoom, tileLocations.get(i).size *mapZoom);
         popMatrix();
-        //image(tempIMG,((tileLocations.get(i).location.x - x)*mapZoom + XOffset)+ x, ((tileLocations.get(i).location.y - y)*mapZoom + YOffset) + y, tileLocations.get(i).size *mapZoom, tileLocations.get(i).size *mapZoom);
       }
     }
     
@@ -121,21 +120,45 @@ class Grid{//The class for the grid will also be placed here
           
           //delete tiles
           for(int i = 0; i < tileLocations.size(); i++){
-            if(((rows*mapZoom) * int((mouseX - x - XOffset)/(rows*mapZoom)))/mapZoom + x < tileLocations.get(i).location.x + 10 && ((rows*mapZoom) * int((mouseX - x - XOffset)/(rows*mapZoom)))/mapZoom + x > tileLocations.get(i).location.x - 10
-            && ((cols*mapZoom) * int((mouseY - y - YOffset)/(cols*mapZoom)))/mapZoom + y < tileLocations.get(i).location.y + 10 && ((cols*mapZoom) * int((mouseY - y - YOffset)/(cols*mapZoom)))/mapZoom + y > tileLocations.get(i).location.y - 10){
+            float tempX = 0, tempY = 0;
+            if(tileLocations.get(i).orientation == 180){
+              tempX = rows*mapZoom;
+              tempY = cols*mapZoom;
+            }else if(tileLocations.get(i).orientation == 90){
+              tempX = rows*mapZoom;
+              tempY = 0;
+            }else if(tileLocations.get(i).orientation == 270){
+              tempX = 0;
+              tempY = cols*mapZoom;
+            }
+        
+            if((((rows*mapZoom) * int((mouseX - x - XOffset)/(rows*mapZoom)))/mapZoom + x) + tempX < tileLocations.get(i).location.x + 10 && (((rows*mapZoom) * int((mouseX - x - XOffset)/(rows*mapZoom)))/mapZoom + x) + tempX > tileLocations.get(i).location.x - 10
+            && (((cols*mapZoom) * int((mouseY - y - YOffset)/(cols*mapZoom)))/mapZoom + y) + tempY < tileLocations.get(i).location.y + 10 && (((cols*mapZoom) * int((mouseY - y - YOffset)/(cols*mapZoom)))/mapZoom + y) + tempY > tileLocations.get(i).location.y - 10){
               if(typeList.currIndex == tileLocations.get(i).type){
                 tileLocations.remove(i);
                 isIn = true;
               }
             }
           }
-        
+          float tempX = 0, tempY = 0;
+            if(currOrientation == 180){
+              tempX = rows*mapZoom;
+              tempY = cols*mapZoom;
+            }else if(currOrientation == 90){
+              tempX = rows*mapZoom;
+              tempY = 0;
+            }else if(currOrientation == 270){
+              tempX = 0;
+              tempY = cols*mapZoom;
+            }
+            
           if(!isIn){
             noTint();
-            tileLocations.add(new Tile(new PVector(((rows*mapZoom) * int((mouseX - x - XOffset)/(rows*mapZoom)))/mapZoom + x, 
-                                                   ((cols*mapZoom) * int((mouseY - y - YOffset)/(cols*mapZoom)))/mapZoom + y), tileLoadText.getText(), rows, typeList.currIndex, currOrientation));
-          }
+            tileLocations.add(new Tile(new PVector(((((rows*mapZoom) * int((mouseX - x - XOffset)/(rows*mapZoom)))/mapZoom + x) + tempX), 
+                                                   (((cols*mapZoom) * int((mouseY - y - YOffset)/(cols*mapZoom)))/mapZoom + y) + tempY), tileLoadText.getText(), rows, typeList.currIndex, currOrientation));
+            }
         }
+        //----------------
       }
     }
   }
