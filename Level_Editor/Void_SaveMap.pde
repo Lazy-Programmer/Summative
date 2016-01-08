@@ -2,6 +2,10 @@ void SaveMap(){
   if(savePath.getText().length() > 0){
     JSONArray values = new JSONArray();
     
+    float tempMapZoom = mapZoom;
+    mapZoom = 1.0;
+    tileMap.display();
+    
     for(int i = 0; i < tileLocations.size(); i++){
       JSONObject tileObject = new JSONObject();
       
@@ -14,6 +18,9 @@ void SaveMap(){
       
       values.setJSONObject(i, tileObject);
     }
+    
+    mapZoom = tempMapZoom;
+    tileMap.display();
     
     saveJSONArray(values, sketchPath(savePath.getText()));
     
