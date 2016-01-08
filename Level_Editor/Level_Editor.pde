@@ -15,6 +15,10 @@ void draw(){
   //draw underlay
   displayUnderlay();
   
+  //reset Zoom
+  if(mousePressed && mouseButton == CENTER){
+      mapZoom = 1.0;
+  }
   noStroke();
   if(state == "edit"){
     editTab.backColour(24, 23, 100);
@@ -191,9 +195,27 @@ void draw(){
   DisplayPreview();
 }
 
+//This is for the future. There is a bug where it will try to open a file with a case sensitive name and get an error.
+boolean fileCheck(File file){
+  boolean res = false;
+  String [] children;
+  File tempFile = new File(sketchPath("..\\" + file.getName()));
+  children = tempFile.list();
+  if(children != null){
+    for(int i = 0; i < children.length; i++){
+      if(file.getName() == children[i]){
+        res = true;
+      }
+      println(file.getName() + "||" + children[i]);
+    }
+  }
+  println("empty");
+  return res;
+}
+//----------------------------------------------------------
+
 void mouseWheel(MouseEvent event) {
   float e = event.getCount();
-  
   if(!(mouseX < tileMap.x || mouseX > tileMap.x + tileMap.w || mouseY < tileMap.y || mouseY > tileMap.y + tileMap.h)){
     if(e > 0){
       mapZoom += 0.01;
@@ -309,7 +331,8 @@ void init(){
   typeList = new ListBox("Tile Type", int(width*0.87), int(height*0.25), 150, 20);
   typeList.colour(23, 54, 175);
   typeList.addContent("Object");
-  typeList.addContent("Scene");
+  typeList.addContent("Scene L1");
+  typeList.addContent("Scene L2");
   
   //scrollers
   leftRightScroller = new Scroller(int(width * 0.386), height - 10, height - 100, 20);
