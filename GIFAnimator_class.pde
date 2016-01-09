@@ -4,6 +4,7 @@ class GIFAnimator{
     int index;
     int fps;
     int stall;
+    boolean stalling;
     float deltaTime;
     boolean visible;
     ArrayList <String> filenames;
@@ -16,6 +17,7 @@ class GIFAnimator{
       fps = 56;
       deltaTime = 0;
       stall = -1;
+      stalling = false;
       visible = true;
       slides = new ArrayList<PImage>();
       filenames = new ArrayList<String>();
@@ -47,7 +49,7 @@ class GIFAnimator{
     
     //display the animator
     void display(){
-      deltaTime += frameRate/60;
+      deltaTime += timer.timeSinceLastCall/10;
       if(deltaTime >= 60 - fps){
         index -= 1;
         if(index <= -1){
@@ -57,12 +59,13 @@ class GIFAnimator{
       }
       
       //draw the image
-      if(slides.size() > 0){
-        if(stall < 0){
-          image(slides.get(index), position.x, position.y, size.x, size.y);
-        }else{
-          image(slides.get(index), position.x, position.y, size.x, size.y);
-        }
+      if(stalling){
+        image(slides.get(stall), position.x, position.y, size.x, size.y);
+      }else{
+        image(slides.get(index), position.x, position.y, size.x, size.y);
+      }
+      if(index == stall && stall > 0){
+        stalling = true;
       }
     }
 }
