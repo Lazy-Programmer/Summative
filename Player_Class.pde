@@ -7,27 +7,27 @@ class Player extends Living {//player class, can be used for 1 player or have mu
   boolean dashing = false;
   float distDashed = 0;
   int equipedWeapon = 1;
-  int weapon1 = -1;
-  int weapon2 = -1;
+  int weapon1 = 1;
+  int weapon2 = 2;
 
   Player(PVector tposition, PVector tsize, PVector tvelocity, float tspeed, float torientation, /* GIF STUFF*/ int thealth, int tteam, int tammo) {
     super(tposition, tsize, tvelocity, tspeed, torientation, thealth, tteam, tammo);
   }
 
   void display() {
-    orientation = atan2( position.y-view.convertCoords(mouseX,mouseY).y, position.x-view.convertCoords(mouseX,mouseY).x )*180/PI + 180;
-    translate(position.x,position.y);
+    orientation = atan2( position.y-view.convertCoords(mouseX, mouseY).y, position.x-view.convertCoords(mouseX, mouseY).x )*180/PI + 180;
+    translate(position.x, position.y);
     rotate(radians(orientation - 90));
-    rect(0,0, size.x, size.y);
+    rect(0, 0, size.x, size.y);
     //for(int i = 0; i < animation.size(); i++){
-      if(animation.size() > currAnimation){
-         animation.get(currAnimation).position.x = 0;
-         animation.get(currAnimation).position.y = 0;
-         animation.get(currAnimation).display();
-      }
+    if (animation.size() > currAnimation) {
+      animation.get(currAnimation).position.x = 0;
+      animation.get(currAnimation).position.y = 0;
+      animation.get(currAnimation).display();
+    }
     //}
     rotate(-radians(orientation));
-    translate(-position.x,-position.y);
+    translate(-position.x, -position.y);
   }
 
   void calculateVelocity() {// used to determine what direction the player is going in
@@ -78,15 +78,15 @@ class Player extends Living {//player class, can be used for 1 player or have mu
       velocity.x = 0;
       velocity.y = 0;
     }
-    
+
     //testing for the shoulder dash
-    float angle = 360 - (atan2( position.y-view.convertCoords(mouseX,mouseY).y, position.x-view.convertCoords(mouseX,mouseY).x )*180/PI + 180);
-    if(dashing){
+    float angle = 360 - (atan2( position.y-view.convertCoords(mouseX, mouseY).y, position.x-view.convertCoords(mouseX, mouseY).x )*180/PI + 180);
+    if (dashing) {
       velocity.x = (dist(position.x, position.y, view.convertCoords(mouseX, mouseY).x, view.convertCoords(mouseX, mouseY).y)*cos(radians(angle)))/(dist(position.x, position.y, view.convertCoords(mouseX, mouseY).x, view.convertCoords(mouseX, mouseY).y)/(speed*4));
       velocity.y = -(dist(position.x, position.y, view.convertCoords(mouseX, mouseY).x, view.convertCoords(mouseX, mouseY).y)*sin(radians(angle)))/(dist(position.x, position.y, view.convertCoords(mouseX, mouseY).x, view.convertCoords(mouseX, mouseY).y)/(speed*4));
-      
+
       distDashed += speed*4;
-      if(distDashed >= 20 || distDashed >= dist(position.x, position.y, view.convertCoords(mouseX, mouseY).x, view.convertCoords(mouseX, mouseY).y)/(speed*4)){
+      if (distDashed >= 20 || distDashed >= dist(position.x, position.y, view.convertCoords(mouseX, mouseY).x, view.convertCoords(mouseX, mouseY).y)/(speed*4)) {
         distDashed = 0;
         dashing = false;
       }
@@ -115,7 +115,7 @@ class Player extends Living {//player class, can be used for 1 player or have mu
     if (!(doesCollide ==  -1)) {//if it is not colliding with anything, move.
       position.x -= velocity.x * timer.timeSinceLastCall;
       position.y -= velocity.y * timer.timeSinceLastCall;
-      while(doesCollide == -1){
+      while (doesCollide == -1) {
         position.x -= (velocity.x * timer.timeSinceLastCall)/20;
         position.y -= (velocity.y * timer.timeSinceLastCall)/20;
       }
@@ -125,14 +125,14 @@ class Player extends Living {//player class, can be used for 1 player or have mu
   }
 
   void shoot() {
-    if( (weapon1 == -1 && equipedWeapon == 1) || equipedWeapon == 0){
-      PVector firingPos;
-   //   if(orientation < 180){
-   //     firingPos = new PVector(position.x + cos(180 - orientation)*size.x/2, position.y + sin(orientation)*size.y/2);
- //     }else{
-        firingPos = new PVector(position.x + cos(orientation), position.y + sin(orientation));
- //     }
-      //fist.fire(firingPos, new PVector(mouseX, mouseY), 1);
+    PVector firingPos;
+    firingPos = new PVector(position.x + cos(orientation), position.y + sin(orientation ));
+    if ( (weapon1 == -1 && equipedWeapon == 1) || equipedWeapon == 0) {
+      fist.fire(firingPos, view.convertCoords(mouseX, mouseY), 1);
+    } else if ((weapon1 == 1 && equipedWeapon == 1) || (weapon2 == 1 && equipedWeapon == 2) ) {
+      pistol.fire(firingPos, view.convertCoords(mouseX, mouseY), 1);
+    } else if ( (weapon1 == 2 && equipedWeapon == 1) || (weapon2 == 2 && equipedWeapon == 2) ) {
+      shotgun.fire(firingPos, view.convertCoords(mouseX, mouseY), 1);
     }
   }
 }
