@@ -15,19 +15,31 @@ class Player extends Living {//player class, can be used for 1 player or have mu
   }
 
   void display() {
+    pushMatrix();
     orientation = atan2( position.y-view.convertCoords(mouseX, mouseY).y, position.x-view.convertCoords(mouseX, mouseY).x )*180/PI + 180;
     translate(position.x, position.y);
     rotate(radians(orientation - 90));
-    rect(0, 0, size.x, size.y);
+    if(!(animation.size() > 0)){
+      rect(0, 0, size.x, size.y);
+    }
     //for(int i = 0; i < animation.size(); i++){
     if (animation.size() > currAnimation) {
       animation.get(currAnimation).position.x = 0;
       animation.get(currAnimation).position.y = 0;
       animation.get(currAnimation).display();
+      if(animationTime > 0){
+        animationTime -= timer.timeSinceLastCall;
+        if(animationTime <= 0){
+          animation.get(currAnimation).stall = -1;
+          animation.get(currAnimation).stalling = false;
+          currAnimation = prevAnimation;
+          prevAnimation = -1;
+          animationTime = -1.0;
+        }
+      }
     }
     //}
-    rotate(-radians(orientation));
-    translate(-position.x, -position.y);
+    popMatrix();
   }
 
   void calculateVelocity() {// used to determine what direction the player is going in
