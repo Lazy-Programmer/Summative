@@ -2,7 +2,6 @@ class Node {
   int ID;
   PVector position;
   boolean isPassable;
-  boolean isOccupied;
   ArrayList<Integer> neighboursID = new ArrayList<Integer>();
   float Gval;
   float Fval;
@@ -17,7 +16,7 @@ class Node {
   }
 
   void display() {
-    if (isPathed == true) {
+    if (isPassable == true) {
       fill(255, 0, 0);
     } else {
       fill(0, 255, 0);
