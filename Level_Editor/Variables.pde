@@ -2,6 +2,7 @@ Grid tileMap;
 GIFBox gifBox;
 GIFAnimator gifPlayer;
 boolean deletingSlides = false;
+Timer timer;
 
 //preview
 PImage prevIMG;
