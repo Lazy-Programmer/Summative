@@ -23,7 +23,7 @@ class GIFBox{
   }
   
   void addSlide(String filename){
-    slides.add(new TextRect(x, y, w, int(h/8), loadImage(filename)));
+    slides.add(new TextRect(x, y, w, int(h/8), loadImage(sketchPath(filename))));
     slides.get(slides.size() - 1).text = "Slide " + str(slides.size());
     slides.get(slides.size() - 1).textColour(28, 196, 26);
   }
