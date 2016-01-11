@@ -36,9 +36,7 @@ ArrayList<Integer> Astar(int startNode, int targetNode, ArrayList<Node> nodes) {
     current = open.get(0);// adds the first node to the current node, so it can be evaluated
     open.remove(0);//removes first node from the open list
     localNodes.get(startNode).list = 0;//set the start node list to closed
-    //int loopCount = 0;  
-    println("test5");
-    do {// does this at least once so the list can be populated].position.y, 2) ));//gives horizontal/vertical nodes their F value
+    do {// does this at least once so the list can be populated
       ArrayList<Integer> neighboursID = current.neighboursID;// gets the IDs of the current node's neighbours
       for ( int i = 0; i < neighboursID.size(); i++) {// iterates though the neighbours
         if (localNodes.get(neighboursID.get(i)).list == 0) {//checks if the node is on either the open or closed list
@@ -72,7 +70,6 @@ ArrayList<Integer> Astar(int startNode, int targetNode, ArrayList<Node> nodes) {
       }
       //loopCount++;
     } while (current.ID != targetNode);
-    //cout << loopCount << endl;
     ArrayList<Integer> path = new ArrayList<Integer>();
     do {
       path.add(current.parentNode);
