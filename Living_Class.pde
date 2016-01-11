@@ -1,5 +1,4 @@
 abstract class Living extends Entity {//simply extends the Entity class, giving it health and a team
-  int team;
   int ammo;
   float speed;
   int currAnimation;
