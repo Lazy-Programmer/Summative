@@ -6,7 +6,7 @@ void generateNavpoints(PVector areaPos, PVector areaSize, int granularity){// po
   }  
   for(int i = 0; i < walls.size(); i++){
     for(int j = 0; j < navPoints.size(); j++){
-      if(navPoints.get(j).position.x + 10 >= navPoints.get(i).position.x && navPoints.get(j).position.x - 10 <= walls.get(i).position.x + walls.get(i).size.x && navPoints.get(j).position.y + 10 >= walls.get(i).position.y && navPoints.get(j).position.y - 10 <= walls.get(i).position.y + walls.get(i).size.y){
+      if(walls.get(i).tangible == true && navPoints.get(j).position.x + 30 >= walls.get(i).position.x  - walls.get(i).size.x/2 && navPoints.get(j).position.x - 30 <= walls.get(i).position.x + walls.get(i).size.x/2 && navPoints.get(j).position.y + 30 >= walls.get(i).position.y - walls.get(i).size.y/2 && navPoints.get(j).position.y - 30 <= walls.get(i).position.y + walls.get(i).size.y/2){
         navPoints.get(j).isPassable = false;
       }
     }
