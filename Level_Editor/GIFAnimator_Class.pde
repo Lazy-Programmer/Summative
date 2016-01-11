@@ -46,7 +46,7 @@ class GIFAnimator{
   
   //display the animator
   void display(){
-    deltaTime += frameRate/60;
+    deltaTime += timer.timeSinceLastCall/10;
     if(deltaTime >= 60 - fps){
       index -= 1;
       if(index <= -1){
