@@ -25,17 +25,16 @@ class Wall extends NonLiving {
     }
   }
   
-  void display() {//default display method, should only be called when a child does not have its own yet or it encounters an error
-      pushMatrix();
-      translate(position.x + size.x/2, position.y + size.x/2);
+  void display() {
+      translate(position.x, position.y);
       rotate(radians(orientation));
-      translate(size.x/2, size.y/2);
       if(isImage){
         imageMode(CENTER);
         image(imageHolder.get(imageIndex), 0 , 0 , size.x, size.y);
       }else{
         rect(0, 0, size.x, size.y);
       }
-      popMatrix();
+      rotate(-radians(orientation));
+      translate(-position.x,-position.y);
     }
 }
