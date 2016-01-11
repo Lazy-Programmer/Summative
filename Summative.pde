@@ -1,10 +1,14 @@
 Timer timer;
-ArrayList<Bullet> bullets = new ArrayList<Bullet>();
 Player myPlayer;
 Fist fist;
 Pistol pistol;
 Shotgun shotgun;
 int gameState = 1;
+boolean displayingText = false;
+PImage textBox;
+Text textBoxText;
+PFont techFont; //subject to change
+ArrayList<Bullet> bullets = new ArrayList<Bullet>();
 ArrayList<Wall> walls = new ArrayList<Wall>();
 ArrayList<PImage> imageHolder = new ArrayList<PImage>();
 ArrayList<String> imageHolderFilename = new ArrayList<String>();
@@ -14,16 +18,17 @@ View view;
 void setup() {
   size(1280, 800);
   rectMode(CENTER);
-  myPlayer = new Player(new PVector(width*0.75, height/2), new PVector(32, 32), new PVector(0, 0), 0.35, 0, 100, 0, 45 );
+  myPlayer = new Player(new PVector(width*0.75, height/2), new PVector(64, 64), new PVector(0, 0), 0.35, 0, 100, 0, 45 );
   fist = new Fist();
   pistol = new Pistol();
   shotgun = new Shotgun();
   timer = new Timer();
   view = new View(new PVector(width/2, height/2), new PVector(width, height));
+  //textBox = loadImage(sketchPath("..\\Data\\textBox.png"));
   //walls.add(new Wall(new PVector(width/4, height/4), new PVector(50, 50), 0, "asd"));
-  //LoadMap("floor");
-  //myPlayer.animation.add(new GIFAnimator(myPlayer.position.x, myPlayer.position.y, myPlayer.size.x, myPlayer.size.y));
-  //myPlayer.addAnimation("animation.anim");
+  //LoadMap("testMap");
+  //myPlayer.addAnimation("output.anim");
+  //myPlayer.addAnimation("catAttack.anim");
   noStroke();
   generateNavpoints(new PVector(0, 0), new PVector(1000, 1000), 25);
 }
@@ -58,6 +63,16 @@ void keyPressed() {
       keyPressed = false;
       myPlayer.dashing = true;
     }
+  }
+  if(key == 'e' && myPlayer.prevAnimation == -1){
+    keyPressed = false;
+    //myPlayer.playAnimation(1, 300, 1);
+    /*textBoxText = new Text("hello this is a long sentence that should break the bounderies of the text box. Continuing to write more stuff so that it will run off of the bottom of the black screen. iduhfiaudfhiud haiusdh aiudh aiud hasidu haisud hasidu hasiudah sidua hi.", new PVector(width*0.25,height*0.76), 24, int(width*0.52));
+    if(displayingText){
+      displayingText = false;
+    }else{
+      displayingText = true;
+    }*/
   }
 }
 
