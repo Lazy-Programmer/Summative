@@ -30,13 +30,13 @@ abstract class Weapon extends NonLiving {
   }
 
   void fire(PVector origin, PVector target, int team) {
-    if (cooldown < 1) {// && reload <= 0) {//if the gun is not reloading or waiting to fire, fire
+    if (cooldown < 1) {//if the gun is not reloading or waiting to fire, fire
       cooldown = firerate;
       target = mapCoordinatesToCircle(position, 300, target);// map the target to a circle to keep the accuracy constant rather than dependant on distance to target
       PVector deviation;
       if (inaccuracy != 0) {
         deviation = new PVector(round(random(-inaccuracy, inaccuracy)), round(random(-inaccuracy, inaccuracy)));
-      } else {//artifact from c++ conversion, not needed
+      } else {
         deviation = new PVector(0, 0);
       }
       PVector bulletVelocity;
