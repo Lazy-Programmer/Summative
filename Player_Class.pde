@@ -18,6 +18,7 @@ class Player extends Living {//player class, can be used for 1 player or have mu
     orientation = atan2( position.y-view.convertCoords(mouseX, mouseY).y, position.x-view.convertCoords(mouseX, mouseY).x )*180/PI + 180;
     translate(position.x, position.y);
     rotate(radians(orientation - 90));
+    fill(255,0,0,100);
     rect(0, 0, size.x, size.y);
     //for(int i = 0; i < animation.size(); i++){
     if (animation.size() > currAnimation) {
@@ -28,6 +29,7 @@ class Player extends Living {//player class, can be used for 1 player or have mu
     //}
     rotate(-radians(orientation));
     translate(-position.x, -position.y);
+    fill(255);
   }
 
   void calculateVelocity() {// used to determine what direction the player is going in
@@ -126,7 +128,7 @@ class Player extends Living {//player class, can be used for 1 player or have mu
 
   void shoot() {
     PVector firingPos;
-    firingPos = new PVector(position.x + cos(orientation), position.y + sin(orientation ));
+    firingPos = new PVector(position.x, position.y); //(position.x, position.y);
     if ( (weapon1 == -1 && equipedWeapon == 1) || equipedWeapon == 0) {
       fist.fire(firingPos, view.convertCoords(mouseX, mouseY), 1);
     } else if ((weapon1 == 1 && equipedWeapon == 1) || (weapon2 == 1 && equipedWeapon == 2) ) {
