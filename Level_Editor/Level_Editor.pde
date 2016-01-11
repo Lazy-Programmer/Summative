@@ -15,6 +15,9 @@ void draw(){
   //draw underlay
   displayUnderlay();
   
+  //timer
+  timer.time();
+  
   //reset Zoom
   if(mousePressed && mouseButton == CENTER){
       mapZoom = 1.0;
@@ -132,7 +135,10 @@ void draw(){
     if(spriteSpeed.clicked()){
      mousePressed = false;
      gifPlayer.fps += 4;
-     if(gifPlayer.fps > 56){
+     if(gifPlayer.fps > 56 && gifPlayer.fps < 61){
+       gifPlayer.fps = 59;
+     }
+     if(gifPlayer.fps > 60){
        gifPlayer.fps = 30;
      }
     }
@@ -181,18 +187,19 @@ void draw(){
   topDownScroller.display();
   
   if(leftRightScroller.right.clicked()){
-    tileMap.XOffset -= 5;
+    tileMap.XOffset -= timer.timeSinceLastCall*0.5;
   }else if(leftRightScroller.left.clicked()){
-    tileMap.XOffset += 5;
+    tileMap.XOffset += timer.timeSinceLastCall*0.5;
   }
   
   if(topDownScroller.right.clicked()){
-    tileMap.YOffset -= 5;
+    tileMap.YOffset -= timer.timeSinceLastCall*0.5;
   }else if(topDownScroller.left.clicked()){
-    tileMap.YOffset += 5;
+    tileMap.YOffset += timer.timeSinceLastCall*0.5;
   }
   
   DisplayPreview();
+  timer.call();
 }
 
 //This is for the future. There is a bug where it will try to open a file with a case sensitive name and get an error.
@@ -245,6 +252,9 @@ void init(){
   
   //tile map
  tileMap = new Grid(20, 80, height - 100, height - 100); 
+ 
+ //timer
+  timer = new Timer();
  
  //GIF Box
  gifBox = new GIFBox(int(width*0.874), int(height*0.55), int(width*0.26), int(height*0.5));
