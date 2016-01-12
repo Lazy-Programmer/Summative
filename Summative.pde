@@ -25,7 +25,7 @@ PFont furore;
 void setup() {
   size(1280, 800);
   rectMode(CENTER);
-  myPlayer = new Player(new PVector(width*0.75, height/2), new PVector(32, 32), new PVector(0, 0), 0.35, 0, 100, 0, 45 );
+  myPlayer = new Player(new PVector(width*0.75, height/2), new PVector(32, 44), new PVector(0, 0), 0.35, 0, 100, 0, 45 );
   dummy = new Birb_Enemy(new PVector(75, 50), 0);
   dumber = new Cat_Enemy(new PVector(50, 50), 0);
   fist = new Fist();
@@ -48,8 +48,10 @@ void setup() {
   // walls.add(new Wall(new PVector(1015, 500), new PVector(10, 1015), 0, "asd"));
   // walls.add(new Wall(new PVector(500, 100 ), new PVector(800, 10), 0, "asd"));
   //LoadMap("floor");
-  //myPlayer.animation.add(new GIFAnimator(myPlayer.position.x, myPlayer.position.y, myPlayer.size.x, myPlayer.size.y));
-  //myPlayer.addAnimation("animation.anim");
+  myPlayer.addAnimation("data/Animations/MainCharacterWalk.anim");
+  myPlayer.addAnimation("data/Animations/MainCharacterShootingStanding.anim");
+  myPlayer.addAnimation("data/Animations/MainCharacterShootingWalking.anim");
+  dummy.addAnimation("data/Animations/BirbWalking.anim");
   noStroke();
   generateNavpoints(new PVector(0, 0), new PVector(1000, 1000), 25);
 }
@@ -67,7 +69,7 @@ void draw() {
 }
 
 void keyPressed() {
-  if (key == 'w') {
+ if (key == 'w') {
     myPlayer.isMovingUp = true;
   }
   if (key == 's') {
@@ -85,15 +87,15 @@ void keyPressed() {
       myPlayer.dashing = true;
     }
   }
-  if (key == 'e' && myPlayer.prevAnimation == -1) {
+  if(key == 'e' && myPlayer.prevAnimation == -1){
     keyPressed = false;
     //myPlayer.playAnimation(1, 300, 1);
     /*textBoxText = new Text("hello this is a long sentence that should break the bounderies of the text box. Continuing to write more stuff so that it will run off of the bottom of the black screen. iduhfiaudfhiud haiusdh aiudh aiud hasidu haisud hasidu hasiudah sidua hi.", new PVector(width*0.25,height*0.76), 24, int(width*0.52));
-     if(displayingText){
-     displayingText = false;
-     }else{
-     displayingText = true;
-     }*/
+    if(displayingText){
+      displayingText = false;
+    }else{
+      displayingText = true;
+    }*/
   }
 }
 
@@ -122,9 +124,6 @@ void mousePressed() {
   case 1:
     if (mouseButton == LEFT) {
       myPlayer.isShooting = true;
-    }
-    if(mouseButton == RIGHT){
-     myPlayer.health --; 
     }
     break;
   }
