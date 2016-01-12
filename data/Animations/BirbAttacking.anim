@@ -1,0 +1,10 @@
+[
+  {
+    "slide": "data/Images/Monsters/Birb Monster/Attack/Birb_atk01.png",
+    "speed": 10
+  },
+  {
+    "slide": "data/Images/Monsters/Birb Monster/Attack/Birb_atk02.png",
+    "speed": 10
+  }
+]
