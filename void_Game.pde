@@ -68,6 +68,7 @@ void Game() {
     rectMode(CENTER);
   }
   textSize(healthBar.height/3);
+  imageMode(CORNER);
   image(healthBar, width*0.125 - healthBar.width/2, height - height*0.125 - healthBar.height/2);
   fill(255);
   if(myPlayer.health < 0){
