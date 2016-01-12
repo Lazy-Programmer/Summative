@@ -40,12 +40,12 @@ class Birb_Enemy extends Enemy {
       break;
     case 3:
       //The enemy can see the player 
+              orientation = ( atan2( position.y-myPlayer.position.y, position.x-myPlayer.position.x )*180/PI + 180);
       if ( dist(position.x, position.y, myPlayer.position.x, myPlayer.position.y) <= 400) {
         //attack
         isAttacking = true;
         attack();
       } else {
-        orientation = ( atan2( position.y-myPlayer.position.y, position.x-myPlayer.position.x )*180/PI + 180);
         target = mapCoordinatesToCircle(myPlayer.position, 300, position);
         if (roughlyEqual(position, target, 5) == false) {
           moveToTarget();
@@ -62,7 +62,7 @@ class Birb_Enemy extends Enemy {
   
   void display() {
     pushMatrix();
-    orientation = atan2( position.y-view.convertCoords(myPlayer.position.x, myPlayer.position.y).y, position.x-view.convertCoords(myPlayer.position.x, myPlayer.position.y).x )*180/PI + 180;
+    //orientation = atan2( position.y-view.convertCoords(myPlayer.position.x, myPlayer.position.y).y, position.x-view.convertCoords(myPlayer.position.x, myPlayer.position.y).x )*180/PI + 180;
     translate(position.x, position.y);
     rotate(radians(orientation - 90));
     if(!(animation.size() > 0)){
