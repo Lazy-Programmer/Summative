@@ -2,7 +2,7 @@ class Birb_Enemy extends Enemy {
   boolean isAttacking = false;
 
   Birb_Enemy(PVector tposition, float torientation) {
-    super(tposition, new PVector(22, 27), 0.2, torientation, 15, 2);
+    super(tposition, new PVector(44, 54), 0.2, torientation, 15, 2);
   }
 
   void enemyAI() {
@@ -58,6 +58,33 @@ class Birb_Enemy extends Enemy {
       break;
     }
     pathFind();
+  }
+  
+  void display() {
+    pushMatrix();
+    orientation = atan2( position.y-view.convertCoords(myPlayer.position.x, myPlayer.position.y).y, position.x-view.convertCoords(myPlayer.position.x, myPlayer.position.y).x )*180/PI + 180;
+    translate(position.x, position.y);
+    rotate(radians(orientation - 90));
+    if(!(animation.size() > 0)){
+      rectMode(CENTER);
+      rect(0, 0, size.x, size.y);
+    }
+    if (animation.size() > currAnimation) {
+      animation.get(currAnimation).position.x = 0;
+      animation.get(currAnimation).position.y = 0;
+      animation.get(currAnimation).display();
+      if(animationTime > 0){
+        animationTime -= timer.timeSinceLastCall;
+        if(animationTime <= 0){
+          animation.get(currAnimation).stall = -1;
+          animation.get(currAnimation).stalling = false;
+          currAnimation = prevAnimation;
+          prevAnimation = -1;
+          animationTime = -1.0;
+        }
+      }
+    }
+    popMatrix();
   }
 
   void attack() {
