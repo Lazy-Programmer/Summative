@@ -1,0 +1,42 @@
+[
+  {
+    "slide": "data/Images/Monsters/Cat Monster/Attack/Cat atk10.png",
+    "speed": 59
+  },
+  {
+    "slide": "data/Images/Monsters/Cat Monster/Attack/Cat atk09.png",
+    "speed": 59
+  },
+  {
+    "slide": "data/Images/Monsters/Cat Monster/Attack/Cat atk08.png",
+    "speed": 59
+  },
+  {
+    "slide": "data/Images/Monsters/Cat Monster/Attack/Cat atk07.png",
+    "speed": 59
+  },
+  {
+    "slide": "data/Images/Monsters/Cat Monster/Attack/Cat atk06.png",
+    "speed": 59
+  },
+  {
+    "slide": "cdata/Images/Monsters/Cat Monster/Attack/Cat atk05.png",
+    "speed": 59
+  },
+  {
+    "slide": "data/Images/Monsters/Cat Monster/Attack/Cat atk04.png",
+    "speed": 59
+  },
+  {
+    "slide": "data/Images/Monsters/Cat Monster/Attack/Cat atk03.png",
+    "speed": 59
+  },
+  {
+    "slide": "data/Images/Monsters/Cat Monster/Attack/Cat atk02.png",
+    "speed": 59
+  },
+  {
+    "slide": "data/Images/Monsters/Cat Monster/Attack/Cat atk01.png",
+    "speed": 59
+  }
+]
