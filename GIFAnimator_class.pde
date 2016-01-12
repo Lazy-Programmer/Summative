@@ -50,7 +50,7 @@ class GIFAnimator{
     //display the animator
     void display(){
       deltaTime += timer.timeSinceLastCall/10;
-      if(deltaTime >= 60 - fps){
+      if(deltaTime >= fps){
         index -= 1;
         if(index <= -1){
           index = slides.size() - 1;
@@ -60,8 +60,10 @@ class GIFAnimator{
       
       //draw the image
       if(stalling){
+        imageMode(CENTER);
         image(slides.get(stall), position.x, position.y, size.x, size.y);
       }else{
+        imageMode(CENTER);
         image(slides.get(index), position.x, position.y, size.x, size.y);
       }
       if(index == stall && stall > 0){
