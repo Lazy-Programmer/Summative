@@ -14,15 +14,15 @@ class Player extends Living {//player class, can be used for 1 player or have mu
     super(tposition, tsize, tvelocity, tspeed, torientation, thealth, tteam, tammo);
   }
 
-  void display() {
-   pushMatrix();
+   void display() {
+    pushMatrix();
     orientation = atan2( position.y-view.convertCoords(mouseX, mouseY).y, position.x-view.convertCoords(mouseX, mouseY).x )*180/PI + 180;
     translate(position.x, position.y);
     rotate(radians(orientation - 90));
     if(!(animation.size() > 0)){
+      rectMode(CENTER);
       rect(0, 0, size.x, size.y);
     }
-    //for(int i = 0; i < animation.size(); i++){
     if (animation.size() > currAnimation) {
       animation.get(currAnimation).position.x = 0;
       animation.get(currAnimation).position.y = 0;
@@ -38,7 +38,6 @@ class Player extends Living {//player class, can be used for 1 player or have mu
         }
       }
     }
-    //}
     popMatrix();
   }
 
