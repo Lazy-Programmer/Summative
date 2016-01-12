@@ -20,9 +20,9 @@ class Player extends Living {//player class, can be used for 1 player or have mu
     translate(position.x, position.y);
     rotate(radians(orientation - 90));
     if(!(animation.size() > 0)){
+      rectMode(CENTER);
       rect(0, 0, size.x, size.y);
     }
-    //for(int i = 0; i < animation.size(); i++){
     if (animation.size() > currAnimation) {
       animation.get(currAnimation).position.x = 0;
       animation.get(currAnimation).position.y = 0;
@@ -38,7 +38,6 @@ class Player extends Living {//player class, can be used for 1 player or have mu
         }
       }
     }
-    //}
     popMatrix();
   }
 
@@ -138,7 +137,7 @@ class Player extends Living {//player class, can be used for 1 player or have mu
 
   void shoot() {
     PVector firingPos;
-    firingPos = new PVector(position.x + cos(orientation), position.y + sin(orientation ));
+    firingPos = new PVector(position.x, position.y); //(position.x, position.y);
     if ( (weapon1 == -1 && equipedWeapon == 1) || equipedWeapon == 0) {
       fist.fire(firingPos, view.convertCoords(mouseX, mouseY), 1);
     } else if ((weapon1 == 1 && equipedWeapon == 1) || (weapon2 == 1 && equipedWeapon == 2) ) {
