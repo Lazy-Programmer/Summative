@@ -43,4 +43,19 @@ void Game() {
   shotgun.delay();
   timer.call();
   popMatrix();
+  fill(#f14321);
+  if(myPlayer.health > 0){
+    float hpw = 150*width/1280;
+    float plHP = myPlayer.health;
+    rectMode(CORNER);
+    rect(94/1280.0*width,677/800.0*height,plHP/100*hpw,46/80.0*healthBar.height,0,23,23,0);
+    rectMode(CENTER);
+  }
+  textSize(healthBar.height/3);
+  image(healthBar, width*0.125 - healthBar.width/2, height - height*0.125 - healthBar.height/2);
+  fill(255);
+  if(myPlayer.health < 0){
+   myPlayer.health = 0; 
+  }
+  text(myPlayer.health, width*0.125 - healthBar.width/3 ,height - height*0.125);
 }
