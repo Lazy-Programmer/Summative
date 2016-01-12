@@ -17,7 +17,7 @@ abstract class Entity {
     tangible = true; //the only real exceptions are floors
   }
 
-  void display() {//default display method, should only be called when a child does not have its own yet or it encounters an error
+  void display() {
     translate(position.x, position.y);
     rotate(radians(orientation));
     rect(0, 0, size.x, size.y);
