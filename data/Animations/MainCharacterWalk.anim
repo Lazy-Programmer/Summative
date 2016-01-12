@@ -1,0 +1,15 @@
+[
+  {
+    "slide": "data/Images/Main Character/Walking/grill_left.png",
+    "speed": 16
+  },
+  {
+    "slide": "data/Images/Main Character/Walking/grill_idle.png",
+    "speed": 16 },
+  {
+    "slide": "data/Images/Main Character/Walking/grill_right.png",
+    "speed": 16 },
+  {
+    "slide": "data/Images/Main Character/Walking/grill_idle.png",
+    "speed": 16 }
+]
