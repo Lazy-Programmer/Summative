@@ -5,6 +5,7 @@ abstract class Entity {
   PVector velocity;
   float orientation;
   boolean tangible;
+  String action;
   int team;
   //GIF STUFF
 
@@ -15,6 +16,7 @@ abstract class Entity {
     orientation = torientation;
     health = thealth;
     tangible = true; //the only real exceptions are floors
+    action = "  ";
   }
 
   void display() {
