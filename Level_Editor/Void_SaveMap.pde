@@ -14,7 +14,9 @@ void SaveMap(){
       tileObject.setInt("size", int(tileLocations.get(i).size));
       tileObject.setInt("type", tileLocations.get(i).type);
       tileObject.setFloat("orientation", tileLocations.get(i).orientation);
+      tileObject.setFloat("demension", tileLocations.get(i).demensions);
       tileObject.setString("filename", tileLocations.get(i).filename);
+      tileObject.setString("action", tileLocations.get(i).action);
       
       values.setJSONObject(i, tileObject);
     }
