@@ -1,0 +1,15 @@
+[
+  {
+    "slide": "data/Images/Monsters/Cat Monster/Walking/Cat_leftForward.png",
+    "speed": 16
+  },
+  {
+    "slide": "data/Images/Monsters/Cat Monster/Walking/Cat_idle.png",
+    "speed": 16 },
+  {
+    "slide": "data/Images/Monsters/Cat Monster/Walking/Cat_rightForward.png",
+    "speed": 16 },
+  {
+    "slide": "data/Images/Monsters/Cat Monster/Walking/Cat_idle.png",
+    "speed": 16 }
+]
