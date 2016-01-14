@@ -4,7 +4,7 @@ class Shotgun extends Weapon {
     super(myPlayer.position, new PVector(3, 3), new PVector(0, 0), myPlayer.orientation, 50, 500, 10, 750, 0.2, new PVector(3, 3));
   }
 
-  void fire(PVector origin, PVector target, int team) {
+  boolean fire(PVector origin, PVector target, int team) {
     if (cooldown < 1) {// && reload <= 0) {//if the gun is not reloading or waiting to fire, fire
       for (int i = 0; i < 10; i++) {
         cooldown = firerate;
@@ -34,5 +34,6 @@ class Shotgun extends Weapon {
     if (reload > 0) {// reload the gun
       reload -= timer.timeSinceLastCall;
     }
+    return true
   }
 }
