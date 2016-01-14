@@ -29,7 +29,7 @@ abstract class Weapon extends NonLiving {
     }
   }
 
-  void fire(PVector origin, PVector target, int team) {
+  boolean fire(PVector origin, PVector target, int team) {
     if (cooldown < 1) {//if the gun is not reloading or waiting to fire, fire
       cooldown = firerate;
       target = mapCoordinatesToCircle(position, 300, target);// map the target to a circle to keep the accuracy constant rather than dependant on distance to target
@@ -42,6 +42,7 @@ abstract class Weapon extends NonLiving {
       PVector bulletVelocity;
       bulletVelocity = new PVector(cos(atan2( target.y + deviation.y - origin.y, target.x + deviation.x - origin.x))*speed, sin(atan2( target.y + deviation.y - origin.y, target.x + deviation.x - origin.x))*speed);
       bullets.add(new Bullet(origin, bulletSize, bulletVelocity, orientation, damage, team, range));
+      return true;
     }
     if (clipSize == 0) {//reload the gun if it is empty
       reload = reloadTime;
@@ -49,5 +50,6 @@ abstract class Weapon extends NonLiving {
     if (reload > 0) {// reload the gun
       reload -= timer.timeSinceLastCall;
     }
+    return false;
   }
 }
