@@ -1,3 +1,5 @@
+import ddf.minim.*;
+
 Timer timer;
 Player myPlayer;
 Birb_Enemy dummy;
@@ -19,15 +21,23 @@ View view;
 PImage title;
 PImage menuButton;
 PImage healthBar;
+PImage ammoBar;
+PImage featherBullet;
 ImageButton play;
 PFont furore;
+Minim minim;
+AudioPlayer menuTheme;
+int[] introSequenceTimer = {0,0,255};
+boolean isStarted = false;
 
 void setup() {
   size(1280, 800);
+  minim = new Minim(this);
+ // menuTheme = minim.loadFile("data/Music/MainMenuTheme.wav");
   rectMode(CENTER);
   myPlayer = new Player(new PVector(width*0.75, height/2), new PVector(32, 44), new PVector(0, 0), 0.35, 0, 100, 0, 45 );
   dummy = new Birb_Enemy(new PVector(75, 50), 0);
-  dumber = new Cat_Enemy(new PVector(50, 50), 0);
+  dumber = new Cat_Enemy(new PVector(50, 50), 45);
   fist = new Fist();
   pistol = new Pistol();
   shotgun = new Shotgun();
@@ -38,6 +48,9 @@ void setup() {
   menuButton = loadImage("data/Images/UI/menuButton.png");
   healthBar = loadImage("data/Images/UI/HP_bar.png");
   healthBar.resize(healthBar.width*width/1280, healthBar.height*height/800);
+  ammoBar = loadImage("data/Images/UI/Ammo_bar.png");
+  ammoBar.resize(ammoBar.width*width/1280, healthBar.height*height/800);
+  featherBullet = loadImage("data/Images/Monsters/Birb Monster/Feather-Ammo/feather2.png");
   play = new ImageButton(width/2 - menuButton.width*width/1000/2, height/2 - menuButton.height*width/1000/2, menuButton.width*width/1000, menuButton.height*width/1000, menuButton, "Play");
   furore = createFont("data/Images/Fonts/Furore.otf", 128);
   textFont(furore);
@@ -52,6 +65,8 @@ void setup() {
   myPlayer.addAnimation("data/Animations/MainCharacterShootingStanding.anim");
   myPlayer.addAnimation("data/Animations/MainCharacterShootingWalking.anim");
   dummy.addAnimation("data/Animations/BirbWalking.anim");
+  //dumber.addAnimation("data/Animations/catAttack.anim");
+  dumber.addAnimation("data/Animations/catWalking.anim");
   noStroke();
   generateNavpoints(new PVector(0, 0), new PVector(1000, 1000), 25);
 }
@@ -69,47 +84,47 @@ void draw() {
 }
 
 void keyPressed() {
- if (key == 'w') {
+ if (key == 'w'|| key == 'W') {
     myPlayer.isMovingUp = true;
   }
-  if (key == 's') {
+  if (key == 's'|| key == 'S') {
     myPlayer.isMovingDown = true;
   }
-  if (key == 'a') {
+  if (key == 'a'|| key == 'A') {
     myPlayer.isMovingLeft = true;
   }
-  if (key == 'd') {
+  if (key == 'd'|| key == 'D') {
     myPlayer.isMovingRight = true;
   }
-  if (key == 'f') {
+  if (key == 'f'|| key == 'F') {
     if (!myPlayer.dashing) {
       keyPressed = false;
       myPlayer.dashing = true;
     }
   }
-  if(key == 'e' && myPlayer.prevAnimation == -1){
+  if((key == 'e' || key == 'E') && myPlayer.prevAnimation == -1){
     keyPressed = false;
     //myPlayer.playAnimation(1, 300, 1);
-    /*textBoxText = new Text("hello this is a long sentence that should break the bounderies of the text box. Continuing to write more stuff so that it will run off of the bottom of the black screen. iduhfiaudfhiud haiusdh aiudh aiud hasidu haisud hasidu hasiudah sidua hi.", new PVector(width*0.25,height*0.76), 24, int(width*0.52));
-    if(displayingText){
-      displayingText = false;
-    }else{
-      displayingText = true;
-    }*/
+    //textBoxText = new Text("hello this is a long sentence that should break the bounderies of the text box. Continuing to write more stuff so that it will run off of the bottom of the black screen. iduhfiaudfhiud haiusdh aiudh aiud hasidu haisud hasidu hasiudah sidua hi.", new PVector(width*0.25,height*0.76), 24, int(width*0.52));
+    //if(displayingText){
+     // displayingText = false;
+    //}else{
+     // displayingText = true;
+    //}
   }
 }
 
 void keyReleased() {
-  if (key == 'w') {
+  if (key == 'w' || key == 'W') {
     myPlayer.isMovingUp = false;
   }
-  if (key == 's') {
+  if (key == 's'|| key == 'S') {
     myPlayer.isMovingDown = false;
   }
-  if (key == 'a') {
+  if (key == 'a'|| key == 'A') {
     myPlayer.isMovingLeft = false;
   }
-  if (key == 'd') {
+  if (key == 'd'|| key == 'D') {
     myPlayer.isMovingRight = false;
   }
 }
@@ -118,7 +133,10 @@ void mousePressed() {
   switch(gameState) {
   case 0:
     if (play.clicked() == true && mouseButton == LEFT) {
-      gameState = 1;
+      //gameState = 1;
+      isStarted = true;
+      timer.time();
+      timer.call();
     }
     break;
   case 1:
