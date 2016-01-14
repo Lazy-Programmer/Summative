@@ -34,6 +34,6 @@ class Shotgun extends Weapon {
     if (reload > 0) {// reload the gun
       reload -= timer.timeSinceLastCall;
     }
-    return true
+    return true;
   }
 }
