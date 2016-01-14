@@ -1,7 +1,33 @@
 class Cat_Enemy extends Enemy {
   boolean isAttacking = false;
   Cat_Enemy(PVector tposition, float torientation) {
-    super(tposition, new PVector(29, 56), 0.25, torientation, 25, 2);
+    super(tposition, new PVector(72, 72), 0.25, torientation, 25, 2);
+  }
+
+  void display() {
+    pushMatrix();
+    translate(position.x, position.y);
+    rotate(radians(orientation - 90));
+    if (!(animation.size() > 0)) {
+      rectMode(CENTER);
+      rect(0, 0, size.x, size.y);
+    }
+    if (animation.size() > currAnimation) {
+      animation.get(currAnimation).position.x = 0;
+      animation.get(currAnimation).position.y = 0;
+      animation.get(currAnimation).display();
+      if (animationTime > 0) {
+        animationTime -= timer.timeSinceLastCall;
+        if (animationTime <= 0) {
+          animation.get(currAnimation).stall = -1;
+          animation.get(currAnimation).stalling = false;
+          currAnimation = prevAnimation;
+          prevAnimation = -1;
+          animationTime = -1.0;
+        }
+      }
+    }
+    popMatrix();
   }
 
   void enemyAI() {
@@ -61,6 +87,5 @@ class Cat_Enemy extends Enemy {
 
   void attack() {
     //animation
-    
   }
 }
