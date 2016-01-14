@@ -4,7 +4,7 @@
     "speed": 30
   },
   {
-    "slide": "data/Images/Monsters/Birb Monster/Walking/Birb_leftForward.png",
+    "slide": "data/Images/Monsters/Birb Monster/Walking/Birb_left.png",
     "speed": 30
   },
   {
@@ -12,7 +12,7 @@
     "speed": 30
   },
   {
-    "slide": "data/Images/Monsters/Birb Monster/Walking/Birb_rightForward.png",
+    "slide": "data/Images/Monsters/Birb Monster/Walking/Birb_right.png",
     "speed": 30
   }
 ]
