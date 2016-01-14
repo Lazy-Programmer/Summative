@@ -135,6 +135,11 @@ class Player extends Living {//player class, can be used for 1 player or have mu
       distDashed = 0;
     }
   }
+  
+  int collidingWith(ArrayList<? extends Entity> entities){
+    int doesCollide = collisionAdvanced(entities);
+    return doesCollide;
+  }
 
   void shoot() {
     PVector firingPos;
