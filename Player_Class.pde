@@ -9,6 +9,7 @@ class Player extends Living {//player class, can be used for 1 player or have mu
   int equipedWeapon = 1;
   int weapon1 = 1;
   int weapon2 = 2;
+  int ammoMax = 45;
 
   Player(PVector tposition, PVector tsize, PVector tvelocity, float tspeed, float torientation, /* GIF STUFF*/ int thealth, int tteam, int tammo) {
     super(tposition, tsize, tvelocity, tspeed, torientation, thealth, tteam, tammo);
@@ -139,11 +140,13 @@ class Player extends Living {//player class, can be used for 1 player or have mu
     PVector firingPos;
     firingPos = new PVector(position.x, position.y); //(position.x, position.y);
     if ( (weapon1 == -1 && equipedWeapon == 1) || equipedWeapon == 0) {
-      fist.fire(firingPos, view.convertCoords(mouseX, mouseY), 1);
-    } else if ((weapon1 == 1 && equipedWeapon == 1) || (weapon2 == 1 && equipedWeapon == 2) ) {
-      pistol.fire(firingPos, view.convertCoords(mouseX, mouseY), 1);
+      fist.fire(firingPos, view.convertCoords(mouseX, mouseY), team);
+    } else if (((weapon1 == 1 && equipedWeapon == 1) || (weapon2 == 1 && equipedWeapon == 2))&& ammo > 0 ) {
+      if(pistol.fire(firingPos, view.convertCoords(mouseX, mouseY), team) == true){
+       ammo --; 
+      }
     } else if ( (weapon1 == 2 && equipedWeapon == 1) || (weapon2 == 2 && equipedWeapon == 2) ) {
-      shotgun.fire(firingPos, view.convertCoords(mouseX, mouseY), 1);
+      shotgun.fire(firingPos, view.convertCoords(mouseX, mouseY), team);
     }
   }
 }
