@@ -15,6 +15,9 @@ void draw(){
   //draw underlay
   displayUnderlay();
   
+  //timer
+  timer.time();
+  
   //reset Zoom
   if(mousePressed && mouseButton == CENTER){
       mapZoom = 1.0;
@@ -56,42 +59,83 @@ void draw(){
   stroke(0);
   
   if(state == "edit"){
-    trueTileLoadText.setVisible(false);
-    tileLoadText.setVisible(true);
-    savePath.setVisible(true);
-    loadButton.buttonText = "Save Map";
-    sizeList.display();
-    typeList.display();
-    rotateButton.update();
-    rotateButton.display();
-    
-    //use the save button
-    if(loadButton.clicked()){
-      mousePressed = false;
-      SaveMap();
-    }
-    
-    //use rotate button
-    if(rotateButton.clicked()){
-      mousePressed = false;
-      currOrientation += 90;
-      if(currOrientation >= 360){
-        currOrientation = 0;
+    addText.update();
+    addText.display();
+    if(!addingAction){
+      trueTileLoadText.setVisible(false);
+      tileLoadText.setVisible(true);
+      savePath.setVisible(true);
+      loadButton.buttonText = "Save Map";
+      sizeList.display();
+      typeList.display();
+      demensionsList.display();
+      rotateButton.update();
+      rotateButton.display();
+      
+      //use the save button
+      if(loadButton.clicked()){
+        mousePressed = false;
+        SaveMap();
+      }
+      
+      //use rotate button
+      if(rotateButton.clicked()){
+        mousePressed = false;
+        currOrientation += 90;
+        if(currOrientation >= 360){
+          currOrientation = 0;
+        }
+      }
+      
+      //use lists
+      if(sizeList.clicked() != -1 && sizeList.status == "down"){
+        tileMap.rows = tileMap.cols = int(sizeList.content.get(sizeList.clicked()));
+        sizeList.currIndex = int(sizeList.clicked());
+        tileMap.XMove = tileMap.XOffset%tileMap.rows;
+        tileMap.YMove = tileMap.YOffset%tileMap.cols;
+        sizeList.status = "up";
+      }
+      
+      if(typeList.clicked() != -1 && typeList.status == "down"){
+        typeList.currIndex = int(typeList.clicked());
+        typeList.status = "up";
+      }
+      
+      if(demensionsList.clicked() != -1 && demensionsList.status == "down"){
+        demensionsList.currIndex = int(demensionsList.clicked());
+        demensionsList.status = "up";
+        if(demensionsList.currIndex == 0){
+          currDemensions = -1;
+        }else if(demensionsList.currIndex == 1){
+          currDemensions = 0.5;
+        }else{
+          currDemensions = (float)int(demensionsList.content.get(demensionsList.currIndex));
+        }
+      }
+    }else{
+      if(loadButton.clicked()){
+        mousePressed = false;
+        LoadAction(addActionText.getText());
       }
     }
     
-    //use lists
-    if(sizeList.clicked() != -1 && sizeList.status == "down"){
-      tileMap.rows = tileMap.cols = int(sizeList.content.get(sizeList.clicked()));
-      sizeList.currIndex = int(sizeList.clicked());
-      tileMap.XMove = tileMap.XOffset%tileMap.rows;
-      tileMap.YMove = tileMap.YOffset%tileMap.cols;
-      sizeList.status = "up";
-    }
-    
-    if(typeList.clicked() != -1 && typeList.status == "down"){
-      typeList.currIndex = int(typeList.clicked());
-      typeList.status = "up";
+    if(addText.clicked()){
+      mousePressed = false;
+      if(addingAction){
+        addingAction = false;
+        addText.x = int(width*0.955);
+        addText.y = int(height*0.27);
+        addText.buttonText = "Action";
+        loadButton.buttonText = "Save Map"; 
+        addActionText.setVisible(false);
+      }else{
+        addingAction = true;
+        addText.x = int(width*0.87);
+        addText.y = int(height*0.10);
+        addText.buttonText = "back";
+        loadButton.buttonText = "Use Action File";
+        addActionText.setVisible(true);
+      }
     }
   }else if(state == "load"){
     trueTileLoadText.setVisible(true);
@@ -132,8 +176,11 @@ void draw(){
     if(spriteSpeed.clicked()){
      mousePressed = false;
      gifPlayer.fps += 4;
-     if(gifPlayer.fps > 56){
-       gifPlayer.fps = 30;
+     if(gifPlayer.fps > 56 && gifPlayer.fps < 61){
+       gifPlayer.fps = 59;
+     }
+     if(gifPlayer.fps > 60){
+       gifPlayer.fps = 10;
      }
     }
     
@@ -181,18 +228,19 @@ void draw(){
   topDownScroller.display();
   
   if(leftRightScroller.right.clicked()){
-    tileMap.XOffset -= 5;
+    tileMap.XOffset -= timer.timeSinceLastCall*0.5;
   }else if(leftRightScroller.left.clicked()){
-    tileMap.XOffset += 5;
+    tileMap.XOffset += timer.timeSinceLastCall*0.5;
   }
   
   if(topDownScroller.right.clicked()){
-    tileMap.YOffset -= 5;
+    tileMap.YOffset -= timer.timeSinceLastCall*0.5;
   }else if(topDownScroller.left.clicked()){
-    tileMap.YOffset += 5;
+    tileMap.YOffset += timer.timeSinceLastCall*0.5;
   }
   
   DisplayPreview();
+  timer.call();
 }
 
 //This is for the future. There is a bug where it will try to open a file with a case sensitive name and get an error.
@@ -246,6 +294,9 @@ void init(){
   //tile map
  tileMap = new Grid(20, 80, height - 100, height - 100); 
  
+ //timer
+  timer = new Timer();
+ 
  //GIF Box
  gifBox = new GIFBox(int(width*0.874), int(height*0.55), int(width*0.26), int(height*0.5));
  gifPlayer = new GIFAnimator(width*0.874, height*0.12, height*0.1, height*0.1);
@@ -275,6 +326,11 @@ void init(){
  rotateButton.roundness = 0;
  rotateButton.buttonText = "r°";
  rotateButton.backColour(23, 54, 175);
+ 
+ addText = new Button(int(width*0.955), int(height*0.27), 60, 20);
+ addText.backColour(23, 54, 175);
+ addText.roundness = 0;
+ addText.buttonText = "Action";
  
  spriteSpeed = new Button(int(width*0.805), int(height*0.825), 80, 20);
  spriteSpeed.buttonText = "Speed";
@@ -318,9 +374,19 @@ void init(){
      .setFocus(true)
      .setColor(color(255,255,255))
      ;
+
+ addActionText = mainControl.addTextfield("Action file")
+     .setPosition(width*0.77,height*0.2)
+     .setSize(140,30)
+     .setFont(font)
+     .setFocus(true)
+     .setColor(color(255,255,255))
+     ;
      
+  addActionText.setVisible(false);
+                  
  //list boxes
-  sizeList = new ListBox("Tile Size", int(width*0.87), int(height*0.4), 150, 20);
+  sizeList = new ListBox("Tile Size", int(width*0.87), int(height*0.41), 150, 20);
   sizeList.colour(23, 54, 175);
   sizeList.addContent("72");
   sizeList.addContent("64");
@@ -328,11 +394,18 @@ void init(){
   sizeList.addContent("24");
   sizeList.addContent("16");
   
-  typeList = new ListBox("Tile Type", int(width*0.87), int(height*0.25), 150, 20);
+  typeList = new ListBox("Type", int(width*0.83), int(height*0.27), 110, 20);
   typeList.colour(23, 54, 175);
   typeList.addContent("Object");
   typeList.addContent("Scene L1");
   typeList.addContent("Scene L2");
+  
+  demensionsList = new ListBox("Demensions", int(width*0.87), int(height*0.10), 150, 20);
+  demensionsList.colour(23, 54, 175);
+  demensionsList.addContent("-");
+  demensionsList.addContent("1/2");
+  demensionsList.addContent("1");
+  demensionsList.addContent("2");
   
   //scrollers
   leftRightScroller = new Scroller(int(width * 0.386), height - 10, height - 100, 20);
