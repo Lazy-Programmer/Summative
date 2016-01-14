@@ -3,7 +3,7 @@ class Wall extends NonLiving {
   boolean isImage;
   int imageIndex;
   
-  Wall(PVector tposition, PVector tsize, float torientation, String filename /* GIF STUFF*/) {
+  Wall(PVector tposition, PVector tsize, float torientation, String filename, String action /* GIF STUFF*/) {
     super(tposition, tsize, new PVector(0, 0), torientation/*GIF STUFF*/);
     File file = new File(sketchPath(filename));
     boolean isInMem = false;
