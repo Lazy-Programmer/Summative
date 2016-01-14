@@ -26,12 +26,12 @@ class Grid{//The class for the grid will also be placed here
     stroke(1); //so we can see the grid;
     
     //offsets
-    if(XOffset > 0){
+    /*if(XOffset > 0){
       XOffset = 0;
     }
     if(YOffset > 0){
       YOffset = 0;
-    }
+    }*/
     
     XMove = XOffset%(rows*mapZoom);
     YMove = YOffset%(cols*mapZoom);
@@ -44,7 +44,7 @@ class Grid{//The class for the grid will also be placed here
         if(x + i + XMove < x + w){
           textAlign(CORNER, CORNER);
           textSize((rows*mapZoom)/3);
-          text(str(int((i/(rows*mapZoom)) + 1 + int(abs(XOffset / (rows*mapZoom))))), x + i + XMove + 10, y );
+          text(str(int(i/(rows*mapZoom) + -int(XOffset/(rows*mapZoom)))), x + i + XMove + 10, y );
         }
       }
     }
@@ -57,7 +57,7 @@ class Grid{//The class for the grid will also be placed here
         if(y + i + YMove < y + h){
           textAlign(CORNER, CORNER);
           textSize((cols*mapZoom)/3);
-          text(str(int(i/(cols*mapZoom) + 1 + int(abs(YOffset / (cols*mapZoom))))), x ,y + i + YMove + 20 );
+          text(str(int(i/(cols*mapZoom) + -int(YOffset/(cols*mapZoom)))), x ,y + i + YMove + 20 );
         }
       }
     }
@@ -81,7 +81,11 @@ class Grid{//The class for the grid will also be placed here
           tempY = 0;
         }
         translate(tempX, tempY);*/
-        image(tempIMG, 0, 0, tileLocations.get(i).size *mapZoom, tileLocations.get(i).size *mapZoom);
+        if(tileLocations.get(i).demensions < 0){
+          image(tempIMG, 0, 0, tileLocations.get(i).size *mapZoom, tileLocations.get(i).size *mapZoom);
+        }else{
+          image(tempIMG, 0, 0, tempIMG.width*tileLocations.get(i).demensions*mapZoom, tempIMG.height*tileLocations.get(i).demensions*mapZoom);
+        }
         popMatrix();
       }
     }
@@ -107,7 +111,11 @@ class Grid{//The class for the grid will also be placed here
           tempY = 0;
         }
         translate(tempX, tempY);
-        image(prevIMG, 0, 0, rows*mapZoom, cols*mapZoom);
+        if(currDemensions < 0){
+          image(prevIMG, 0, 0, rows*mapZoom, cols*mapZoom);
+        }else{
+          image(prevIMG, 0, 0, prevIMG.width*currDemensions*mapZoom, prevIMG.height*currDemensions*mapZoom);
+        }
         popMatrix();
         rectMode(CENTER);
       }
@@ -155,7 +163,7 @@ class Grid{//The class for the grid will also be placed here
           if(!isIn){
             noTint();
             tileLocations.add(new Tile(new PVector(((((rows*mapZoom) * int((mouseX - x - XOffset)/(rows*mapZoom)))/mapZoom + x) + tempX), 
-                                                   (((cols*mapZoom) * int((mouseY - y - YOffset)/(cols*mapZoom)))/mapZoom + y) + tempY), tileLoadText.getText(), rows, typeList.currIndex, currOrientation));
+                                                   (((cols*mapZoom) * int((mouseY - y - YOffset)/(cols*mapZoom)))/mapZoom + y) + tempY), tileLoadText.getText(), rows, typeList.currIndex, currOrientation, currDemensions, actionText));
             }
         }
         //----------------
