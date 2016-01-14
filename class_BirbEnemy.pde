@@ -1,8 +1,9 @@
 class Birb_Enemy extends Enemy {
   boolean isAttacking = false;
+  int cooldown = 0;
 
   Birb_Enemy(PVector tposition, float torientation) {
-    super(tposition, new PVector(44, 54), 0.2, torientation, 15, 2);
+    super(tposition, new PVector(37, 49), 0.2, torientation, 15, 2);
   }
 
   void enemyAI() {
@@ -40,7 +41,7 @@ class Birb_Enemy extends Enemy {
       break;
     case 3:
       //The enemy can see the player 
-              orientation = ( atan2( position.y-myPlayer.position.y, position.x-myPlayer.position.x )*180/PI + 180);
+      orientation = ( atan2( position.y-myPlayer.position.y, position.x-myPlayer.position.x )*180/PI + 180);
       if ( dist(position.x, position.y, myPlayer.position.x, myPlayer.position.y) <= 400) {
         //attack
         isAttacking = true;
@@ -59,13 +60,13 @@ class Birb_Enemy extends Enemy {
     }
     pathFind();
   }
-  
+
   void display() {
     pushMatrix();
     //orientation = atan2( position.y-view.convertCoords(myPlayer.position.x, myPlayer.position.y).y, position.x-view.convertCoords(myPlayer.position.x, myPlayer.position.y).x )*180/PI + 180;
     translate(position.x, position.y);
     rotate(radians(orientation - 90));
-    if(!(animation.size() > 0)){
+    if (!(animation.size() > 0)) {
       rectMode(CENTER);
       rect(0, 0, size.x, size.y);
     }
@@ -73,9 +74,9 @@ class Birb_Enemy extends Enemy {
       animation.get(currAnimation).position.x = 0;
       animation.get(currAnimation).position.y = 0;
       animation.get(currAnimation).display();
-      if(animationTime > 0){
+      if (animationTime > 0) {
         animationTime -= timer.timeSinceLastCall;
-        if(animationTime <= 0){
+        if (animationTime <= 0) {
           animation.get(currAnimation).stall = -1;
           animation.get(currAnimation).stalling = false;
           currAnimation = prevAnimation;
@@ -88,5 +89,14 @@ class Birb_Enemy extends Enemy {
   }
 
   void attack() {
+    if (cooldown < 1) {//if the gun is not reloading or waiting to fire, fire
+      cooldown = 1500;
+      PVector aim = mapCoordinatesToCircle(position, 300, myPlayer.position);// map the target to a circle to keep the accuracy constant rather than dependant on distance to target
+      PVector bulletVelocity;
+      bulletVelocity = new PVector(cos(atan2( aim.y  - position.y, aim.x - position.x))*0.75, sin(atan2( aim.y - position.y, aim.x - position.x))*0.75);
+      bullets.add(new feather(new PVector(position.x,position.y), bulletVelocity, orientation));
+    }else {
+      cooldown -= timer.timeSinceLastCall;
+    }
   }
 }
