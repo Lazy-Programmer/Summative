@@ -75,7 +75,7 @@ class ImageButton extends Button {
     image(picture, xPos, yPos);
     fill(#FFFFFF);
     textAlign(CENTER,CENTER);
-    textSize(buttonHeight/4);
+    textSize(buttonHeight/3);
     text(label,xPos + buttonWidth/2,yPos+buttonHeight/2, buttonWidth, buttonHeight);
     noTint();
   }
