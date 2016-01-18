@@ -1,4 +1,5 @@
 //taken from http://www.geeksforgeeks.org/check-if-two-given-line-segments-intersect/
+//converted from C++, It would be awsome if you could explain to me how this works, its like magic, clockwise? counter clockwise? beats the collision code we had
 
 // Given three colinear points p, q, r, the function checks if
 // point q lies on line segment 'pr'
