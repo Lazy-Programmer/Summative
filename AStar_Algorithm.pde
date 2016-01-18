@@ -1,25 +1,26 @@
 boolean comp(Node subjectONE, Node subjectTWO) {
-  return subjectONE.Fval <= subjectTWO.Fval;
+  return subjectONE.Fval <= subjectTWO.Fval;//if a is < b return true
 }
 
-ArrayList<Node> order(ArrayList<Node> nodes) {
+ArrayList<Node> order(ArrayList<Node> nodes) {//used to order nodes from lowest FVal to Highest
   boolean isDone = true;
   do {
     isDone = true;
     for (int i = 0; i < nodes.size() - 1; i++) {
       if (comp(nodes.get(i), nodes.get(i + 1)) == false ) {
         Node tempONE = nodes.get(i);
-        nodes.set(i, nodes.get(i + 1));
+        nodes.set(i, nodes.get(i + 1));//swaps the nodes, didn't have the collections imported at the time
         nodes.remove(i+1);
         nodes.add(i + 1, tempONE);
         isDone = false;
       }
     }
-  } while (isDone == false);
+  } while (isDone == false);//keep looping untill you go through a loop where nothing is changed
   return nodes;
 }
 
 ArrayList<Integer> Astar(int startNode, int targetNode, ArrayList<Node> nodes) {
+  int loopCount = 0;
   if (nodes.get(startNode).isPassable == true && nodes.get(targetNode).isPassable == true ) {
     ArrayList<Node> localNodes = new ArrayList<Node>();
     for (int i = 0; i < nodes.size(); i++) {
@@ -28,7 +29,7 @@ ArrayList<Integer> Astar(int startNode, int targetNode, ArrayList<Node> nodes) {
         localNodes.get(i).neighboursID.add(nodes.get(i).neighboursID.get(j));
       }
     }
-      ArrayList<Node> open = new ArrayList<Node>();// create the open list
+    ArrayList<Node> open = new ArrayList<Node>();// create the open list
     ArrayList<Node> closed = new ArrayList<Node>();// create the closed list
     Node current;//the node being evaluated
     localNodes.get(startNode).list = 1;//set the start node list to open
@@ -68,7 +69,11 @@ ArrayList<Integer> Astar(int startNode, int targetNode, ArrayList<Node> nodes) {
         current = open.get(0);//sets the current node to the node with the lowest Fval
         open.remove(0);//removes the current node from the open list
       }
-      //loopCount++;
+      loopCount++;
+      if (loopCount >= 1000) {
+        ArrayList<Integer> ERROR = new ArrayList<Integer>();
+        return ERROR;
+      }
     } while (current.ID != targetNode);
     ArrayList<Integer> path = new ArrayList<Integer>();
     do {
