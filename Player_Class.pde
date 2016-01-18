@@ -6,31 +6,34 @@ class Player extends Living {//player class, can be used for 1 player or have mu
   boolean isShooting = false;
   boolean dashing = false;
   float distDashed = 0;
-  int equipedWeapon = 1;
-  int weapon1 = 1;
-  int weapon2 = 2;
+  // int equipedWeapon = 1;
+  //int weapon1 = 1;
+  //int weapon2 = 2;
   int ammoMax = 45;
 
   Player(PVector tposition, PVector tsize, PVector tvelocity, float tspeed, float torientation, /* GIF STUFF*/ int thealth, int tteam, int tammo) {
     super(tposition, tsize, tvelocity, tspeed, torientation, thealth, tteam, tammo);
+    addAnimation("data/Animations/MainCharacterWalk.anim");
+    addAnimation("data/Animations/MainCharacterShootingStanding.anim");
+    addAnimation("data/Animations/MainCharacterShootingWalking.anim");
   }
 
-   void display() {
+  void display() {
     pushMatrix();
-    orientation = atan2( position.y-view.convertCoords(mouseX, mouseY).y, position.x-view.convertCoords(mouseX, mouseY).x )*180/PI + 180;
-    translate(position.x, position.y);
-    rotate(radians(orientation - 90));
-    if(!(animation.size() > 0)){
+    orientation = atan2( position.y-view.convertCoords(mouseX, mouseY).y, position.x-view.convertCoords(mouseX, mouseY).x )*180/PI + 180;//rotate the player based on angle to cursor
+    translate(position.x, position.y);//move to the player's position
+    rotate(radians(orientation - 90));//rotate
+    if (!(animation.size() > 0)) {//display rectangle if there is no animation
       rectMode(CENTER);
       rect(0, 0, size.x, size.y);
     }
-    if (animation.size() > currAnimation) {
+    if (animation.size() > currAnimation) {//display animation
       animation.get(currAnimation).position.x = 0;
       animation.get(currAnimation).position.y = 0;
       animation.get(currAnimation).display();
-      if(animationTime > 0){
+      if (animationTime > 0) {
         animationTime -= timer.timeSinceLastCall;
-        if(animationTime <= 0){
+        if (animationTime <= 0) {
           animation.get(currAnimation).stall = -1;
           animation.get(currAnimation).stalling = false;
           currAnimation = prevAnimation;
@@ -102,32 +105,35 @@ class Player extends Living {//player class, can be used for 1 player or have mu
         distDashed = 0;
         dashing = false;
       }
-      println(speed*4);
+      //println(speed*4);
     }
     //---------------------------------
   }
 
-  int collisionSide(ArrayList<? extends Entity> entities, int entityID) {
-    if (position.x + size.x/2 <= entities.get(entityID).position.x - entities.get(entityID).size.x/2 && position.x + size.x/2 + velocity.x*timer.timeSinceLastCall >= entities.get(entityID).position.x - entities.get(entityID).size.x/2) {
-      return 4; //1: Up, 2: Right, 3: Down, 4: Left
-    } else if (position.x - size.x/2 >= entities.get(entityID).position.x + entities.get(entityID).size.x/2 && position.x - size.x/2 + velocity.x*timer.timeSinceLastCall <= entities.get(entityID).position.x + entities.get(entityID).size.x/2) {
-      return 2;
-    } else if (position.y + size.y/2 <= entities.get(entityID).position.y - entities.get(entityID).size.y/2 && position.y + size.y/2 + velocity.y*timer.timeSinceLastCall >= entities.get(entityID).position.y - entities.get(entityID).size.y/2) {
-      return 1;
-    } else if (position.y - size.y/2 >= entities.get(entityID).position.y + entities.get(entityID).size.y/2 && position.y - size.y/2 + velocity.y*timer.timeSinceLastCall <= entities.get(entityID).position.y + entities.get(entityID).size.y/2) {
-      return 3;
-    }
-    return 0;
-  }
-
   void moveAdvanced(ArrayList<? extends Entity> entities) {
-    position.x += velocity.x * timer.timeSinceLastCall;
+    position.x += velocity.x * timer.timeSinceLastCall;//move the player based on time
     position.y += velocity.y * timer.timeSinceLastCall;
     int doesCollide = collisionAdvanced(entities);
     if (!(doesCollide ==  -1)) {//if it is not colliding with anything, move.
-      position.x -= velocity.x * timer.timeSinceLastCall;
-      position.y -= velocity.y * timer.timeSinceLastCall;
-      while (doesCollide == -1) {
+      if (entities.get(doesCollide).action.equals("ammo") ) {// if they collide with ammo, pick it up and remove it
+        myPlayer.ammo += 6;
+        if (myPlayer.ammo > 45) {
+          myPlayer.ammo = 45;
+        }
+        walls.remove(doesCollide);
+        entities.remove(doesCollide);
+      } else if (entities.get(doesCollide).action.equals("health")) {//if thecollide with health pick it up and remove it
+        myPlayer.health += 25;
+        if (myPlayer.health > 100) {
+          myPlayer.health = 100;
+        }
+        walls.remove(doesCollide);
+        entities.remove(doesCollide);
+      } else {//if they collide with something, move them back
+        position.x -= velocity.x * timer.timeSinceLastCall;
+        position.y -= velocity.y * timer.timeSinceLastCall;
+      }
+      while (doesCollide == -1) {// if they get stuck in something, nudge them back out the way they came
         position.x -= (velocity.x * timer.timeSinceLastCall)/20;
         position.y -= (velocity.y * timer.timeSinceLastCall)/20;
       }
@@ -135,23 +141,23 @@ class Player extends Living {//player class, can be used for 1 player or have mu
       distDashed = 0;
     }
   }
-  
-  int collidingWith(ArrayList<? extends Entity> entities){
+
+  int collidingWith(ArrayList<? extends Entity> entities) {
+    position.x += velocity.x * timer.timeSinceLastCall;
+    position.y += velocity.y * timer.timeSinceLastCall;
     int doesCollide = collisionAdvanced(entities);
+    position.x -= velocity.x * timer.timeSinceLastCall;
+    position.y -= velocity.y * timer.timeSinceLastCall;
     return doesCollide;
   }
 
   void shoot() {
     PVector firingPos;
-    firingPos = new PVector(position.x, position.y); //(position.x, position.y);
-    if ( (weapon1 == -1 && equipedWeapon == 1) || equipedWeapon == 0) {
-      fist.fire(firingPos, view.convertCoords(mouseX, mouseY), team);
-    } else if (((weapon1 == 1 && equipedWeapon == 1) || (weapon2 == 1 && equipedWeapon == 2))&& ammo > 0 ) {
-      if(pistol.fire(firingPos, view.convertCoords(mouseX, mouseY), team) == true){
-       ammo --; 
+    firingPos = new PVector(position.x, position.y); //(position.x, position.y);// position from were they player is standing
+    if ( ammo > 0 ) {// if you have ammo
+      if (pistol.fire(firingPos, view.convertCoords(mouseX, mouseY), team) == true) {// fire
+        ammo --;// if you fired, remove ammo
       }
-    } else if ( (weapon1 == 2 && equipedWeapon == 1) || (weapon2 == 2 && equipedWeapon == 2) ) {
-      shotgun.fire(firingPos, view.convertCoords(mouseX, mouseY), team);
     }
   }
 }
