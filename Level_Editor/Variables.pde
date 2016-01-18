@@ -3,7 +3,7 @@ GIFBox gifBox;
 GIFAnimator gifPlayer;
 boolean deletingSlides = false;
 boolean addingAction = false;
-String actionText;
+String actionText = "  ";
 Timer timer;
 
 //preview
