@@ -46,8 +46,8 @@ class GIFAnimator{
   
   //display the animator
   void display(){
-    deltaTime += frameRate/60;
-    if(deltaTime >= 60 - fps){
+    deltaTime += timer.timeSinceLastCall/10;
+    if(deltaTime >= fps){
       index -= 1;
       if(index <= -1){
         index = slides.size() - 1;
