@@ -3,20 +3,21 @@ class Birb_Enemy extends Enemy {
   int cooldown = 0;
 
   Birb_Enemy(PVector tposition, float torientation) {
-    super(tposition, new PVector(37, 49), 0.2, torientation, 15, 2);
+    super(tposition, new PVector(37, 49), 0.2, torientation, 25, 2);
+    addAnimation("data/Animations/BirbWalking.anim");
   }
 
   void enemyAI() {
-    velocity.x = 0;
+    velocity.x = 0;//stop the bird from moving
     velocity.y = 0;
-    if ( see(myPlayer.position) == true && isAlert == false) {
-      isAlert = true;
+    if ( see(myPlayer.position) == true && isAlert == false) {//if the bird has seen the player
+      isAlert = true;// then follow them
     }
-    if ( collisionSee(myPlayer.position) == false && isAlert == true) {
-      alertState = 2;
+    if ( collisionSee(myPlayer.position) == false && isAlert == true) {// is their something in my path
+      alertState = 2;//then  pathfind
       path = Astar(PVectorToNode(position), PVectorToNode(myPlayer.position), navPoints);
     } else if (collisionSee(myPlayer.position) == true && isAlert == true) {
-      alertState = 3;
+      alertState = 3;//then attack/aproach directly
     }
     switch(alertState) {
     case 0:
@@ -26,28 +27,29 @@ class Birb_Enemy extends Enemy {
       //The enemy has seen the player but has lost them
       if (path.size() > 1) {
         target = navPoints.get(path.get(path.size()-2)).position;
-        if (roughlyEqual(position, target, 10)) {
-          path.remove(path.size()-1);
+        if (roughlyEqual(position, target, 10)) {//if you're almost at your point, go to the next one
+          path.remove(path.size()-1);//remove your current target
         }
       }
       moveToTarget();
       PVector focus = new PVector();
       for (int i = path.size() -1; i >= 0; i--) {
         if (see(navPoints.get(path.get(i)).position) == true) {
-          focus = navPoints.get(path.get(i)).position;
+          focus = navPoints.get(path.get(i)).position;//find the farthest point on you path you can see
         }
       }
-      orientation = ( atan2( position.y-focus.y, position.x-focus.x )*180/PI + 180);
+      orientation = ( atan2( position.y-focus.y, position.x-focus.x )*180/PI + 180);//and look at it
+      pathFind();
       break;
     case 3:
       //The enemy can see the player 
-      orientation = ( atan2( position.y-myPlayer.position.y, position.x-myPlayer.position.x )*180/PI + 180);
-      if ( dist(position.x, position.y, myPlayer.position.x, myPlayer.position.y) <= 400) {
+      orientation = ( atan2( position.y-myPlayer.position.y, position.x-myPlayer.position.x )*180/PI + 180);//look at the player
+      if ( dist(position.x, position.y, myPlayer.position.x, myPlayer.position.y) <= 400) {//attaking range?
         //attack
         isAttacking = true;
         attack();
       } else {
-        target = mapCoordinatesToCircle(myPlayer.position, 300, position);
+        target = mapCoordinatesToCircle(myPlayer.position, 300, position);//move to attacking range
         if (roughlyEqual(position, target, 5) == false) {
           moveToTarget();
         } else {
@@ -58,19 +60,18 @@ class Birb_Enemy extends Enemy {
       }
       break;
     }
-    pathFind();
   }
 
   void display() {
     pushMatrix();
     //orientation = atan2( position.y-view.convertCoords(myPlayer.position.x, myPlayer.position.y).y, position.x-view.convertCoords(myPlayer.position.x, myPlayer.position.y).x )*180/PI + 180;
-    translate(position.x, position.y);
-    rotate(radians(orientation - 90));
-    if (!(animation.size() > 0)) {
+    translate(position.x, position.y);//move to the bird
+    rotate(radians(orientation - 90));//rotate
+    if (!(animation.size() > 0)) {//if there is not animation
       rectMode(CENTER);
-      rect(0, 0, size.x, size.y);
+      rect(0, 0, size.x, size.y);//display a rectangle
     }
-    if (animation.size() > currAnimation) {
+    if (animation.size() > currAnimation) {//otherwise display the animation
       animation.get(currAnimation).position.x = 0;
       animation.get(currAnimation).position.y = 0;
       animation.get(currAnimation).display();
@@ -93,10 +94,10 @@ class Birb_Enemy extends Enemy {
       cooldown = 1500;
       PVector aim = mapCoordinatesToCircle(position, 300, myPlayer.position);// map the target to a circle to keep the accuracy constant rather than dependant on distance to target
       PVector bulletVelocity;
-      bulletVelocity = new PVector(cos(atan2( aim.y  - position.y, aim.x - position.x))*0.75, sin(atan2( aim.y - position.y, aim.x - position.x))*0.75);
-      bullets.add(new feather(new PVector(position.x,position.y), bulletVelocity, orientation));
-    }else {
-      cooldown -= timer.timeSinceLastCall;
+      bulletVelocity = new PVector(cos(atan2( aim.y  - position.y, aim.x - position.x))*0.75, sin(atan2( aim.y - position.y, aim.x - position.x))*0.75);//create the velocity based on angle
+      bullets.add(new feather(new PVector(position.x, position.y), bulletVelocity, orientation));//add the bullet to the array
+    } else {
+      cooldown -= timer.timeSinceLastCall;//wait if you are in cooldown
     }
   }
 }
