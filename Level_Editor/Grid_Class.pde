@@ -122,8 +122,8 @@ class Grid{//The class for the grid will also be placed here
       
       //check for clicks
       if(mousePressed && !(mouseX < x || mouseX > x + w || mouseY < y || mouseY > y + h)){
+        mousePressed = false;
         if(mouseButton == LEFT){
-          mousePressed = false;
           boolean isIn = false;
           
           //delete tiles
