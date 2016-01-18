@@ -1,4 +1,4 @@
-abstract class Weapon extends NonLiving {
+abstract class Weapon extends NonLiving {//you cant declare a weapon but you can have a class that inherits it
   int inaccuracy;
   int firerate;
   int damage;
@@ -35,13 +35,13 @@ abstract class Weapon extends NonLiving {
       target = mapCoordinatesToCircle(position, 300, target);// map the target to a circle to keep the accuracy constant rather than dependant on distance to target
       PVector deviation;
       if (inaccuracy != 0) {
-        deviation = new PVector(round(random(-inaccuracy, inaccuracy)), round(random(-inaccuracy, inaccuracy)));
+        deviation = new PVector(round(random(-inaccuracy, inaccuracy)), round(random(-inaccuracy, inaccuracy)));// create a bit of inaccuracy based on the inaccuracy variable
       } else {
         deviation = new PVector(0, 0);
       }
       PVector bulletVelocity;
-      bulletVelocity = new PVector(cos(atan2( target.y + deviation.y - origin.y, target.x + deviation.x - origin.x))*speed, sin(atan2( target.y + deviation.y - origin.y, target.x + deviation.x - origin.x))*speed);
-      bullets.add(new Bullet(origin, bulletSize, bulletVelocity, orientation, damage, team, range));
+      bulletVelocity = new PVector(cos(atan2( target.y + deviation.y - origin.y, target.x + deviation.x - origin.x))*speed, sin(atan2( target.y + deviation.y - origin.y, target.x + deviation.x - origin.x))*speed);//create the velocity based on the speed variable and the target
+      bullets.add(new Bullet(origin, bulletSize, bulletVelocity, orientation, damage, team, range));//add the new bullet to the array of bullets
       return true;
     }
     if (clipSize == 0) {//reload the gun if it is empty
