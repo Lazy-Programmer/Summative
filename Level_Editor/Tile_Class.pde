@@ -14,7 +14,7 @@ class Tile{
     type = ttype;
     orientation = torientation;
     demensions = tdem;
-    action = "  ";
+    action = null;
   }
   
   Tile(PVector tlocation, String tfilename, int tsize, int ttype, float torientation, float tdem, String taction){
