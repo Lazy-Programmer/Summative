@@ -1,4 +1,4 @@
-class Shotgun extends Weapon {
+class Shotgun extends Weapon {//Don't bother
 
   Shotgun() {
     super(myPlayer.position, new PVector(3, 3), new PVector(0, 0), myPlayer.orientation, 50, 500, 10, 750, 0.2, new PVector(3, 3));
